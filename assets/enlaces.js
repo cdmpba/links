@@ -9,7 +9,7 @@ window.MPBA_DATA = {
   "theme": {
     "mode": "light",
     "bg": "#eaf6fd",
-    "accent": "#1386c4",
+    "accent": "#313d62",
     "font": "sistema",
     "layout": "list",
     "cards": "solid",
