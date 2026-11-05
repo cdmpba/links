@@ -62,7 +62,7 @@ window.MPBA_DATA = {
           "title": "Mapa interactivo de acompañamiento a la víctima",
           "desc": "Centros de asistencia y acompañamiento cerca tuyo",
           "url": "https://www.mpba.gov.ar/miav",
-          "icon": "heart",
+          "icon": "users",
           "visible": true,
           "featured": false
         }
