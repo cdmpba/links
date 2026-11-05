@@ -98,6 +98,14 @@ window.MPBA_DATA = {
     {
       "type": "youtube",
       "url": "https://youtube.com/@CentrodeCapacitacionMPBA"
+    },
+    {
+      "type": "instagram",
+      "url": "https://www.instagram.com/mpbaoficial"
+    },
+    {
+      "type": "linkedin",
+      "url": "https://www.linkedin.com/in/mpba-oficial-982b693b8/"
     }
   ]
 };
