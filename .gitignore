@@ -1,0 +1,7 @@
+# Datos que genera el servidor (nunca al repositorio)
+data/auth.json
+data/attempts.json
+data/links.json
+data/backups/*.json
+uploads/*
+!uploads/.htaccess
