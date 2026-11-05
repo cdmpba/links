@@ -97,7 +97,7 @@ window.MPBA_DATA = {
   "social": [
     {
       "type": "youtube",
-      "url": "https://youtube.com/@CentrodeCapacitacionMPBA"
+      "url": "https://www.youtube.com/channel/UCnRlF42jwiUEX2MOHYdXltg"
     },
     {
       "type": "instagram",
