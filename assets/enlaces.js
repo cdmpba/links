@@ -8,22 +8,22 @@ window.MPBA_DATA = {
   },
   "theme": {
     "mode": "dark",
-    "bg": "#0b1238",
-    "accent": "#3b82f6",
-    "font": "moderna",
-    "layout": "grid",
-    "cards": "glass",
-    "radius": 22,
-    "glow": true,
-    "grid": true,
-    "motion": true,
+    "bg": "#14161c",
+    "accent": "#5b8def",
+    "font": "sistema",
+    "layout": "list",
+    "cards": "outline",
+    "radius": 12,
+    "glow": false,
+    "grid": false,
+    "motion": false,
     "palette": {
-      "blue": "#3b82f6",
-      "green": "#2fb36b",
-      "red": "#ef4b4b",
-      "sky": "#36b9e8",
-      "gold": "#e8b33a",
-      "violet": "#8b7cf6"
+      "blue": "#5b8def",
+      "green": "#3fb67a",
+      "red": "#e45d5d",
+      "sky": "#4fb7e0",
+      "gold": "#d9a640",
+      "violet": "#9a88f0"
     }
   },
   "sections": [
@@ -86,7 +86,7 @@ window.MPBA_DATA = {
           "id": "l5",
           "title": "Canal de YouTube",
           "desc": "Clases, conferencias y actividades grabadas",
-          "url": "https://youtube.com/@CentrodeCapacitacionMPBA",
+          "url": "https://www.youtube.com/channel/UCnRlF42jwiUEX2MOHYdXltg",
           "icon": "youtube",
           "visible": true,
           "featured": false
