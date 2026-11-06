@@ -98,7 +98,8 @@ function clean(array $in): array {
       if ($u === '' || $ti === '') continue;
       $f = !empty($l['featured']) && !$feat; if ($f) $feat = true;
       $sec['links'][] = ['id' => slug($l['id'] ?? '', 'l'), 'title' => $ti, 'desc' => str($l['desc'] ?? '', 160), 'url' => $u,
-        'icon' => in_array($l['icon'] ?? '', ICONS, true) ? $l['icon'] : 'link', 'visible' => !empty($l['visible']), 'featured' => $f];
+        'icon' => in_array($l['icon'] ?? '', ICONS, true) ? $l['icon'] : 'link', 'visible' => !empty($l['visible']), 'featured' => $f,
+        'highlight' => !empty($l['highlight']) && !$f];
     }
     if ($sec['title'] !== '') $o['sections'][] = $sec;
   }
