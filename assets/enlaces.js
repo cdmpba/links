@@ -104,16 +104,6 @@ window.MPBA_DATA = {
       "color": "gold",
       "links": [
         {
-          "id": "lk9l0jg3",
-          "title": "Canal de Youtube",
-          "desc": "Canal oficial del Área de Comunicación Digital y Redes Sociales",
-          "url": "https://www.youtube.com/@ComunicacionDigitalMPBA",
-          "icon": "youtube",
-          "visible": true,
-          "featured": false,
-          "highlight": false
-        },
-        {
           "id": "lqioeusk",
           "title": "Anatomía de una investigación",
           "desc": "Serie audiovisual en la que fiscales del MPBA reconstruyen cómo investigaron casos emblemáticos",
@@ -122,6 +112,16 @@ window.MPBA_DATA = {
           "visible": true,
           "featured": false,
           "highlight": true
+        },
+        {
+          "id": "lk9l0jg3",
+          "title": "Canal de Youtube",
+          "desc": "Canal oficial del Área de Comunicación Digital y Redes Sociales",
+          "url": "https://www.youtube.com/@ComunicacionDigitalMPBA",
+          "icon": "youtube",
+          "visible": true,
+          "featured": false,
+          "highlight": false
         }
       ]
     }
