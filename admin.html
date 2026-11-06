@@ -66,7 +66,11 @@ label.f{display:block;font-size:12.5px;font-weight:600;color:var(--ink2);margin-
 .fields{display:grid;grid-template-columns:1fr 1fr;gap:8px}.fields .w{grid-column:1/-1}
 .side{display:flex;flex-direction:column;gap:2px}
 .tg{display:flex;gap:14px;margin-top:8px;font-size:13.5px;color:var(--ink2)}
+.tg{flex-wrap:wrap;row-gap:6px}
 .tg label{display:flex;align-items:center;gap:6px;cursor:pointer}
+.tg label.dis{opacity:.45;cursor:default}
+.link.is-hl{border-color:#b9c6f3;background:#f4f7ff;box-shadow:inset 3px 0 0 var(--pri)}
+.link.is-feat{border-color:#8ea4f0;background:#eef2ff;box-shadow:inset 3px 0 0 var(--pri),0 6px 18px -12px rgba(35,70,201,.5)}
 .empty{padding:16px;border:1px dashed var(--line);border-radius:var(--r);text-align:center;color:var(--ink3);font-size:14px;margin-bottom:10px}
 .grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}.grid2 .w{grid-column:1/-1}
 .logobox{display:flex;align-items:center;gap:14px}
@@ -242,6 +246,7 @@ function clean(d){
       l.title = l.title.trim().slice(0,100); l.url = l.url.trim(); l.desc = (l.desc||'').trim().slice(0,160);
       if (!ICONS[l.icon]) l.icon = 'link';
       l.visible = l.visible !== false; l.featured = !!l.featured && !feat; if (l.featured) feat = true;
+      l.highlight = !!l.highlight && !l.featured;
       return l;
     });
     return s;
@@ -552,8 +557,12 @@ function vLinks(v){
       var row;
       var visCb = h('input', {type:'checkbox', checked:l.visible!==false, on:{change:function(e){ l.visible=e.target.checked; row.classList.toggle('off', !l.visible); changed(); }}});
       var featCb = h('input', {type:'checkbox', checked:!!l.featured, on:{change:function(e){
-        D.sections.forEach(function(x){x.links.forEach(function(y){y.featured=false})}); l.featured=e.target.checked; render(); changed(); }}});
-      row = h('div', {class:'link' + (l.visible===false?' off':'')}, [
+        var on = e.target.checked;
+        if (on) { var prev = null; D.sections.forEach(function(x){x.links.forEach(function(y){ if (y.featured && y !== l) prev = y; y.featured=false; })});
+          if (prev) toast('«' + (prev.title||'El anterior') + '» dejó de ser el destacado principal'); }
+        l.featured = on; if (on) l.highlight = false; render(); changed(); }}});
+      var hlCb = h('input', {type:'checkbox', checked:!!l.highlight && !l.featured, disabled:!!l.featured, on:{change:function(e){ l.highlight=e.target.checked; render(); changed(); }}});
+      row = h('div', {class:'link' + (l.visible===false?' off':'') + (l.featured?' is-feat':'') + (l.highlight && !l.featured?' is-hl':'')}, [
         ib,
         h('div', {}, [
           h('div', {class:'fields'}, [
@@ -561,7 +570,11 @@ function vLinks(v){
             h('div', {}, [h('label', {class:'f', text:'Dirección (URL)'}), inp(l,'url','https://…','url','Dirección')]),
             h('div', {class:'w'}, [h('label', {class:'f', text:'Descripción breve (opcional)'}), inp(l,'desc','Una línea que explique a dónde lleva','text','Descripción')])
           ]),
-          h('div', {class:'tg'}, [h('label', {}, [visCb, 'Visible']), h('label', {title:'Se muestra grande arriba de todo. Solo puede haber uno.'}, [featCb, 'Destacado'])])
+          h('div', {class:'tg'}, [
+            h('label', {}, [visCb, 'Visible']),
+            h('label', {title:'Se resalta y ocupa todo el ancho, en su lugar dentro de esta sección. Puede haber varios.', class: l.featured ? 'dis' : null}, [hlCb, 'Destacar en la sección']),
+            h('label', {title:'Se muestra grande arriba de todo, antes de las secciones. Solo puede haber uno.'}, [featCb, 'Destacado principal'])
+          ])
         ]),
         h('div', {class:'side'}, [
           h('button', {class:'btn sm ghost', title:'Subir', 'aria-label':'Subir enlace', html:UP, on:{click:function(){move(s.links, li, -1)}}}),
@@ -572,7 +585,7 @@ function vLinks(v){
       box.appendChild(row);
     });
     box.appendChild(h('button', {class:'btn sm', text:'+ Agregar enlace', on:{click:function(){
-      s.links.push({id:uid('l'), title:'', desc:'', url:'https://', icon:'link', visible:true, featured:false}); render(); changed();
+      s.links.push({id:uid('l'), title:'', desc:'', url:'https://', icon:'link', visible:true, featured:false, highlight:false}); render(); changed();
       var rows = $('#view').querySelectorAll('.panel')[si].querySelectorAll('.link'); var last = rows[rows.length-1]; if (last) last.querySelector('input').focus();
     }}}));
     v.appendChild(box);
