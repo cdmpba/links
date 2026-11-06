@@ -422,7 +422,7 @@ async function openGithub(){
 function start(data, backups){
   D = normalize(data); BK = backups || []; saved = JSON.stringify(D);
   $('#loading').classList.add('hidden'); $('#auth').classList.add('hidden'); $('#appw').classList.remove('hidden');
-  $('#pv').src = 'index.html?preview=1';
+  $('#pv').src = 'index.html?preview=1&v=' + Date.now();
   render(); dirty();
 }
 
