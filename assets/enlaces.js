@@ -39,7 +39,8 @@ window.MPBA_DATA = {
           "url": "https://www.mpba.gov.ar/",
           "icon": "globe",
           "visible": true,
-          "featured": true
+          "featured": true,
+          "highlight": false
         }
       ]
     },
@@ -55,7 +56,8 @@ window.MPBA_DATA = {
           "url": "https://www.mpba.gov.ar/mapa",
           "icon": "map",
           "visible": true,
-          "featured": false
+          "featured": false,
+          "highlight": false
         },
         {
           "id": "l3",
@@ -64,7 +66,8 @@ window.MPBA_DATA = {
           "url": "https://www.mpba.gov.ar/miav",
           "icon": "users",
           "visible": true,
-          "featured": false
+          "featured": false,
+          "highlight": false
         }
       ]
     },
@@ -80,7 +83,8 @@ window.MPBA_DATA = {
           "url": "https://cec.mpba.gov.ar/",
           "icon": "school",
           "visible": true,
-          "featured": false
+          "featured": false,
+          "highlight": false
         },
         {
           "id": "l5",
@@ -89,7 +93,8 @@ window.MPBA_DATA = {
           "url": "https://www.youtube.com/channel/UCnRlF42jwiUEX2MOHYdXltg",
           "icon": "youtube",
           "visible": true,
-          "featured": false
+          "featured": false,
+          "highlight": false
         }
       ]
     },
@@ -105,7 +110,8 @@ window.MPBA_DATA = {
           "url": "https://www.youtube.com/@ComunicacionDigitalMPBA",
           "icon": "youtube",
           "visible": true,
-          "featured": false
+          "featured": false,
+          "highlight": false
         },
         {
           "id": "lqioeusk",
@@ -114,7 +120,8 @@ window.MPBA_DATA = {
           "url": "https://www.youtube.com/playlist?list=PLBtWGwJ4GJLU",
           "icon": "link",
           "visible": true,
-          "featured": false
+          "featured": false,
+          "highlight": true
         }
       ]
     }
