@@ -103,6 +103,21 @@ h1 span{background:linear-gradient(100deg,var(--ink) 25%,color-mix(in srgb,var(-
 .card .ar{position:relative;color:var(--ink3);transition:.25s;flex:none;margin-top:2px}
 .card:hover .ar{color:var(--ink);transform:translate(2px,-2px)}
 
+/* Destacado dentro de la sección: ocupa todo el ancho, en su lugar */
+.card.hl{grid-column:1/-1;padding:24px;align-items:center;
+  background:linear-gradient(115deg,color-mix(in srgb,var(--c) 26%,var(--card)),color-mix(in srgb,var(--c) 8%,var(--card)) 70%);
+  border-color:color-mix(in srgb,var(--c) 45%,transparent);box-shadow:0 18px 40px -26px color-mix(in srgb,var(--c) 80%,transparent)}
+.card.hl::after{content:"";position:absolute;left:0;top:18px;bottom:18px;width:4px;border-radius:0 4px 4px 0;background:var(--c)}
+.card.hl:hover{background:linear-gradient(115deg,color-mix(in srgb,var(--c) 32%,var(--card-h)),color-mix(in srgb,var(--c) 12%,var(--card-h)) 70%)}
+.card.hl .ic{width:56px;height:56px}
+.card.hl .t{font-size:18.5px}
+.card.hl .d{font-size:15px}
+.card .pill{display:inline-flex;align-items:center;gap:5px;font:600 10.5px/1 var(--fh);letter-spacing:.12em;text-transform:uppercase;
+  color:color-mix(in srgb,var(--c) 70%,var(--ink));background:color-mix(in srgb,var(--c) 18%,transparent);padding:5px 8px;border-radius:99px;margin-bottom:8px}
+.card .pill::before{content:"";width:5px;height:5px;border-radius:50%;background:currentColor}
+.card.hl .ar{width:38px;height:38px;border-radius:50%;display:grid;place-items:center;background:var(--c);color:#fff;margin-top:0}
+.card.hl:hover .ar{color:#fff;transform:rotate(-45deg)}
+
 footer{margin-top:56px;padding-top:28px;border-top:1px solid var(--line);display:flex;flex-wrap:wrap;gap:16px;justify-content:space-between;align-items:center;color:var(--ink3);font-size:13.5px}
 .soc{display:flex;gap:10px}
 .soc a{width:40px;height:40px;border-radius:12px;display:grid;place-items:center;border:1px solid var(--line);color:var(--ink2);transition:.2s}
@@ -221,7 +236,7 @@ footer{margin-top:56px;padding-top:28px;border-top:1px solid var(--line);display
           a.innerHTML = '<span class="ic">' + IC(l.icon,28) + '</span>';
           var tx = el('div'); tx.appendChild(el('div','lbl','Destacado')); tx.appendChild(el('div','t',l.title)); if (l.desc) tx.appendChild(el('div','d',l.desc));
           a.appendChild(tx); var go = el('span','go'); go.innerHTML = ARROW; a.appendChild(go);
-          main.appendChild(a);
+          main.insertBefore(a, main.firstChild); /* el principal siempre encabeza la página */
         } else rest.push(l);
       });
       if (!rest.length) return;
@@ -230,9 +245,9 @@ footer{margin-top:56px;padding-top:28px;border-top:1px solid var(--line);display
       h.appendChild(el('i')); h.appendChild(el('h2',null,s.title)); h.appendChild(el('hr')); sec.appendChild(h);
       var g = el('div','grid');
       rest.forEach(function(l){
-        var a = el('a','card rv'); a.href = safe(l.url); a.target = '_blank'; a.rel = 'noopener'; a.style.setProperty('--i', n++);
-        a.innerHTML = '<span class="ic">' + IC(l.icon,24) + '</span>';
-        var tx = el('div','tx'); tx.appendChild(el('div','t',l.title)); if (l.desc) tx.appendChild(el('div','d',l.desc));
+        var a = el('a','card rv' + (l.highlight ? ' hl' : '')); a.href = safe(l.url); a.target = '_blank'; a.rel = 'noopener'; a.style.setProperty('--i', n++);
+        a.innerHTML = '<span class="ic">' + IC(l.icon, l.highlight ? 27 : 24) + '</span>';
+        var tx = el('div','tx'); if (l.highlight) tx.appendChild(el('span','pill','Destacado')); tx.appendChild(el('div','t',l.title)); if (l.desc) tx.appendChild(el('div','d',l.desc));
         var hu = host(l.url); if (hu) tx.appendChild(el('div','u',hu));
         a.appendChild(tx); var ar = el('span','ar'); ar.innerHTML = ARROW; a.appendChild(ar);
         a.addEventListener('pointermove', function(e){var r=a.getBoundingClientRect();a.style.setProperty('--mx',(e.clientX-r.left)+'px');a.style.setProperty('--my',(e.clientY-r.top)+'px')});
