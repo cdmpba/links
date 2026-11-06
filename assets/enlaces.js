@@ -35,7 +35,7 @@ window.MPBA_DATA = {
         {
           "id": "l1",
           "title": "Sitio oficial del Ministerio Público",
-          "desc": "Noticias, institucional y trámites de la Procuración General",
+          "desc": "Noticias, institucional y servicios de la Procuración General",
           "url": "https://www.mpba.gov.ar/",
           "icon": "globe",
           "visible": true,
