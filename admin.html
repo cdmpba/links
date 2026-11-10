@@ -214,7 +214,7 @@ input[type=checkbox]{accent-color:var(--pri);width:16px;height:16px}
 </div>
 <div class="toast" id="toast" role="status"></div>
 
-<script src="assets/core.js"></script>
+<script src="assets/core.js?v=20261110b"></script><!-- al cambiar core.js, subir este número para que nadie quede con la versión vieja -->
 <script>
 (function(){
 var IC = window.MPBA_ICON, ICONS = window.MPBA_ICONS, SLOTS = window.MPBA_SLOTS, FONTS = window.MPBA_FONTS, PRESETS = window.MPBA_PRESETS;
@@ -431,7 +431,7 @@ async function openGithub(){
     loadHistory();
   } catch(e) {
     try { sessionStorage.removeItem('mpba-t'); } catch(x) {}
-    show('loginF'); $('#loginE').textContent = e.status ? ghError(e) : 'No se pudo leer el contenido publicado.';
+    show('loginF'); $('#loginE').textContent = e.status ? ghError(e) : 'No se pudo leer el contenido publicado. Recargá la página con Ctrl + F5 y volvé a intentar.'; if (!e.status) console.error(e);
   }
 }
 function start(data, backups){
