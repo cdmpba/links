@@ -53,6 +53,8 @@ function clear_fail(): void { $a = jread(TRIES_FILE, []); unset($a[ip()]); jwrit
 function str($v, int $max): string { $v = is_string($v) ? trim(preg_replace('/\s+/u', ' ', $v)) : ''; return mb_substr($v, 0, $max); }
 function url_ok($u): string { $u = str($u, 600); return preg_match('~^(https?://[^\s<>"]+\.[^\s<>"]+|mailto:[^\s<>"]+|tel:[+0-9 ()-]+)$~i', $u) ? $u : ''; }
 function slug($v, string $p): string { $v = is_string($v) ? preg_replace('/[^a-z0-9_-]/i', '', $v) : ''; return $v !== '' ? substr($v, 0, 24) : $p . bin2hex(random_bytes(4)); }
+/* Vista previa por enlace: '' automática, 'none' sin vista previa, o ruta de una imagen propia */
+function prev_ok($v): string { return $v === 'none' ? 'none' : ((is_string($v) && preg_match('~^(uploads/|assets/previews/)[a-z0-9_.-]+\.(jpe?g|png|webp)$~i', $v)) ? $v : ''); }
 function hex($v, string $def): string { return (is_string($v) && preg_match('/^#[0-9a-f]{6}$/i', $v)) ? strtolower($v) : $def; }
 
 function load(): array {
@@ -100,7 +102,8 @@ function clean(array $in): array {
       $f = !empty($l['featured']) && !$feat; if ($f) $feat = true;
       $sec['links'][] = ['id' => slug($l['id'] ?? '', 'l'), 'title' => $ti, 'desc' => str($l['desc'] ?? '', 160), 'url' => $u,
         'icon' => in_array($l['icon'] ?? '', ICONS, true) ? $l['icon'] : 'link', 'visible' => !empty($l['visible']), 'featured' => $f,
-        'highlight' => !empty($l['highlight']) && !$f];
+        'highlight' => !empty($l['highlight']) && !$f,
+        'preview' => prev_ok($l['preview'] ?? '')];
     }
     if ($sec['title'] !== '') $o['sections'][] = $sec;
   }
@@ -179,7 +182,7 @@ switch ($a) {
     $info = @getimagesize($f['tmp_name']);
     $ext = ['image/png' => 'png', 'image/jpeg' => 'jpg', 'image/webp' => 'webp'][$info['mime'] ?? ''] ?? null;
     if (!$ext) out(['error' => 'Formato no admitido. Usá PNG, JPG o WEBP.'], 400);
-    $name = 'logo-' . date('YmdHis') . '.' . $ext;
+    $name = (($_POST['kind'] ?? '') === 'preview' ? 'prev-' : 'logo-') . date('YmdHis') . '-' . bin2hex(random_bytes(3)) . '.' . $ext;
     if (!move_uploaded_file($f['tmp_name'], UPLOAD_DIR . '/' . $name)) out(['error' => 'No se pudo guardar la imagen.'], 500);
     out(['ok' => true, 'path' => 'uploads/' . $name]);
   case 'password':
