@@ -54,7 +54,7 @@ window.MPBA_DATA = {
         {
           "id": "l2",
           "title": "Mapa de dependencias",
-          "desc": "Encontrá fiscalías, defensorías y sedes en toda la Provincia",
+          "desc": "Encontrá fiscalías, defensorías y sedes en toda la provincia",
           "url": "https://www.mpba.gov.ar/mapa",
           "icon": "map",
           "visible": true,
