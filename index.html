@@ -145,12 +145,16 @@ h1 span{background:linear-gradient(100deg,var(--ink) 25%,color-mix(in srgb,var(-
 /* Celular: captura dentro de los destacados */
 .card.thumb{flex-wrap:wrap;row-gap:14px}
 .card.thumb .ic{display:none}
-.card .th{position:relative;flex:0 0 100%;order:-1;aspect-ratio:2/1;border-radius:calc(var(--r)*.7);overflow:hidden;margin-bottom:2px;
+.card .th,.feat .th{position:relative;flex:0 0 100%;order:-1;aspect-ratio:2/1;border-radius:calc(var(--r)*.7);overflow:hidden;margin-bottom:2px;
   background:color-mix(in srgb,var(--c) 12%,var(--card));box-shadow:inset 0 0 0 1px var(--line)}
-.card .th img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:top;opacity:0;transition:opacity .3s}
-.card .th.ok img{opacity:1}
-.card .th .sk{position:absolute;inset:0;background:linear-gradient(100deg,transparent 30%,color-mix(in srgb,var(--ink) 8%,transparent) 50%,transparent 70%);background-size:220% 100%;animation:sk 1.3s linear infinite}
-.card .th.ok .sk{display:none}
+.card .th img,.feat .th img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:top;opacity:0;transition:opacity .3s}
+.card .th.ok img,.feat .th.ok img{opacity:1}
+.card .th .sk,.feat .th .sk{position:absolute;inset:0;background:linear-gradient(100deg,transparent 30%,color-mix(in srgb,var(--ink) 8%,transparent) 50%,transparent 70%);background-size:220% 100%;animation:sk 1.3s linear infinite}
+.card .th.ok .sk,.feat .th.ok .sk{display:none}
+.feat.thumb{flex-wrap:wrap;row-gap:16px}
+.feat.thumb .ic{display:none}
+.feat.thumb > div{flex:1;min-width:0}
+.feat .th{z-index:1;background:rgba(255,255,255,.12);box-shadow:inset 0 0 0 1px rgba(255,255,255,.22),0 16px 30px -18px rgba(0,0,0,.5)}
 
 /* Celular: mantener apretado un enlace abre una vista previa desde abajo */
 .touch .card,.touch .feat{-webkit-touch-callout:none;-webkit-user-select:none;user-select:none;-webkit-tap-highlight-color:transparent}
@@ -306,7 +310,7 @@ footer{margin-top:56px;padding-top:28px;border-top:1px solid var(--line);display
           a.innerHTML = '<span class="ic">' + IC(l.icon,28) + '</span>';
           var tx = el('div'); tx.appendChild(el('div','lbl','Destacado')); tx.appendChild(el('div','t',l.title)); if (l.desc) tx.appendChild(el('div','d',l.desc));
           a.appendChild(tx); var go = el('span','go'); go.innerHTML = ARROW; a.appendChild(go);
-          hover(a, l, T.accent, false);
+          hover(a, l, T.accent, true);   /* en el celular muestra la captura, como los destacados */
           main.insertBefore(a, main.firstChild); /* el principal siempre encabeza la página */
         } else rest.push(l);
       });
