@@ -69,6 +69,11 @@ label.f{display:block;font-size:12.5px;font-weight:600;color:var(--ink2);margin-
 .tg{flex-wrap:wrap;row-gap:6px}
 .tg label{display:flex;align-items:center;gap:6px;cursor:pointer}
 .tg label.dis{opacity:.45;cursor:default}
+.pvrow{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-top:10px;padding-top:10px;border-top:1px dashed var(--line);font-size:13px;color:var(--ink2)}
+.seg{display:inline-flex;background:#eef1fa;border-radius:9px;padding:2px}
+.seg button{border:0;background:transparent;padding:5px 10px;border-radius:7px;font-size:12.5px;font-weight:600;color:var(--ink2);cursor:pointer}
+.seg button[aria-pressed=true]{background:#fff;color:var(--pri);box-shadow:0 1px 2px rgba(20,26,58,.12)}
+.pvthumb{width:64px;height:40px;border-radius:7px;object-fit:cover;object-position:top;border:1px solid var(--line);background:#f1f3fa}
 .link.is-hl{border-color:#b9c6f3;background:#f4f7ff;box-shadow:inset 3px 0 0 var(--pri)}
 .link.is-feat{border-color:#8ea4f0;background:#eef2ff;box-shadow:inset 3px 0 0 var(--pri),0 6px 18px -12px rgba(35,70,201,.5)}
 .empty{padding:16px;border:1px dashed var(--line);border-radius:var(--r);text-align:center;color:var(--ink3);font-size:14px;margin-bottom:10px}
@@ -235,6 +240,7 @@ function normalize(d){
   d.sections.forEach(function(s){ s.links = s.links || []; });
   return d;
 }
+var PREV_PATH = /^(uploads\/|assets\/previews\/)[a-z0-9_.-]+\.(jpe?g|png|webp)$/i;
 var URL_OK = /^(https?:\/\/\S+\.\S+|mailto:\S+|tel:[+0-9 ()-]+)$/i;
 /* Limpieza antes de publicar (misma regla que aplica api.php en el servidor) */
 function clean(d){
@@ -247,6 +253,7 @@ function clean(d){
       if (!ICONS[l.icon]) l.icon = 'link';
       l.visible = l.visible !== false; l.featured = !!l.featured && !feat; if (l.featured) feat = true;
       l.highlight = !!l.highlight && !l.featured;
+      l.preview = l.preview === 'none' ? 'none' : (PREV_PATH.test(l.preview || '') ? l.preview : '');
       return l;
     });
     return s;
@@ -436,7 +443,26 @@ function dirty(){
 var changed = dirty;
 window.addEventListener('beforeunload', function(e){ if (D && JSON.stringify(D) !== saved) { e.preventDefault(); e.returnValue=''; }});
 
+/* Sube las imágenes de vista previa nuevas (quedan como archivos, no dentro de los datos) */
+async function uploadPreviews(data){
+  var list = [];
+  data.sections.forEach(function(s){ s.links.forEach(function(l){ if (/^data:image\//.test(l.preview || '')) list.push(l); }); });
+  for (var i = 0; i < list.length; i++) {
+    var l = list[i], b64 = l.preview.split(',')[1];
+    if (MODE === 'server') {
+      var bin = b64ToBytes(b64), fd = new FormData();
+      fd.append('logo', new Blob([bin], {type:'image/jpeg'}), 'preview.jpg'); fd.append('kind', 'preview');
+      var j = await api('logo', fd); if (!j.ok) throw new Error(j.error || 'No se pudo subir la imagen');
+      l.preview = j.path;
+    } else {
+      var path = 'assets/previews/' + String(l.id || 'l').replace(/[^a-z0-9_-]/gi, '') + '-' + Date.now() + '.jpg';
+      await gh('PUT', repoPath(CFG) + '/contents/' + path, {message: 'Agrega vista previa de «' + (l.title || 'enlace') + '»', content: b64, branch: CFG.branch});
+      l.preview = path;
+    }
+  }
+}
 async function publish(data, message){
+  await uploadPreviews(data);
   if (MODE === 'server') {
     var j = await api('save', data, true);
     if (!j.ok) throw new Error(j.error || 'No se pudo guardar');
@@ -562,6 +588,23 @@ function vLinks(v){
           if (prev) toast('«' + (prev.title||'El anterior') + '» dejó de ser el destacado principal'); }
         l.featured = on; if (on) l.highlight = false; render(); changed(); }}});
       var hlCb = h('input', {type:'checkbox', checked:!!l.highlight && !l.featured, disabled:!!l.featured, on:{change:function(e){ l.highlight=e.target.checked; render(); changed(); }}});
+      var pmode = l.preview === 'none' ? 'none' : (l.preview ? 'own' : 'auto');
+      var pfile = h('input', {type:'file', accept:'image/png,image/jpeg,image/webp', hidden:true, on:{change:async function(){
+        var f = pfile.files[0]; pfile.value = ''; if (!f) return;
+        try { l.preview = await toPreview(f); render(); changed(); toast('Imagen cargada. Publicá para que se vea en la página.'); }
+        catch(x) { toast('No se pudo leer la imagen', true); }
+      }}});
+      function seg(val, label){ return h('button', {type:'button', 'aria-pressed':String(pmode===val), on:{click:function(){
+        if (val === 'own') { if (pmode !== 'own') pfile.click(); return; }
+        l.preview = val === 'none' ? 'none' : ''; render(); changed();
+      }}}, [label]); }
+      var pvrow = h('div', {class:'pvrow'}, [
+        h('span', {text:'Vista previa al pasar el mouse:'}),
+        h('div', {class:'seg', role:'group', 'aria-label':'Vista previa al pasar el mouse'}, [seg('auto','Captura automática'), seg('own','Imagen propia'), seg('none','Ninguna')]),
+        pmode === 'own' ? h('img', {class:'pvthumb', src:l.preview, alt:'Vista previa cargada'}) : null,
+        pmode === 'own' ? h('button', {type:'button', class:'btn sm ghost', text:'Cambiar imagen', on:{click:function(){ pfile.click(); }}}) : null,
+        pfile
+      ]);
       row = h('div', {class:'link' + (l.visible===false?' off':'') + (l.featured?' is-feat':'') + (l.highlight && !l.featured?' is-hl':'')}, [
         ib,
         h('div', {}, [
@@ -574,7 +617,8 @@ function vLinks(v){
             h('label', {}, [visCb, 'Visible']),
             h('label', {title:'Se resalta y ocupa todo el ancho, en su lugar dentro de esta sección. Puede haber varios.', class: l.featured ? 'dis' : null}, [hlCb, 'Destacar en la sección']),
             h('label', {title:'Se muestra grande arriba de todo, antes de las secciones. Solo puede haber uno.'}, [featCb, 'Destacado principal'])
-          ])
+          ]),
+          pvrow
         ]),
         h('div', {class:'side'}, [
           h('button', {class:'btn sm ghost', title:'Subir', 'aria-label':'Subir enlace', html:UP, on:{click:function(){move(s.links, li, -1)}}}),
@@ -684,6 +728,20 @@ function vProfile(v){
       h('div', {}, [h('label', {class:'f', text:'Usuario en redes'}), inp(P,'handle','@mpbaoficial')])
     ])
   ]));
+}
+/* Recorta la imagen a 16:10 (desde arriba) y la achica a 640×400 */
+function toPreview(file){
+  return new Promise(function(ok, ko){
+    var img = new Image(), url = URL.createObjectURL(file);
+    img.onload = function(){
+      var W = 640, H = 400, c = document.createElement('canvas'); c.width = W; c.height = H;
+      var s = Math.max(W / img.width, H / img.height), w = img.width * s;
+      var g = c.getContext('2d'); g.fillStyle = '#fff'; g.fillRect(0, 0, W, H);
+      g.drawImage(img, (W - w) / 2, 0, w, img.height * s); URL.revokeObjectURL(url);
+      ok(c.toDataURL('image/jpeg', .85));
+    };
+    img.onerror = ko; img.src = url;
+  });
 }
 function shrink(file, max){
   return new Promise(function(ok, ko){
