@@ -114,7 +114,7 @@ window.MPBA_DATA = {
           "title": "Anatomía de una investigación",
           "desc": "Serie audiovisual en la que fiscales del MPBA reconstruyen la investigación de casos emblemáticos",
           "url": "https://www.youtube.com/playlist?list=PLBtWGwJ4GJLU",
-          "icon": "link",
+          "icon": "scale",
           "visible": true,
           "featured": false,
           "highlight": true,
