@@ -40,7 +40,8 @@ window.MPBA_DATA = {
           "icon": "globe",
           "visible": true,
           "featured": true,
-          "highlight": false
+          "highlight": false,
+          "preview": ""
         }
       ]
     },
@@ -57,7 +58,8 @@ window.MPBA_DATA = {
           "icon": "map",
           "visible": true,
           "featured": false,
-          "highlight": false
+          "highlight": false,
+          "preview": "assets/previews/l2-1794311829507.jpg"
         },
         {
           "id": "l3",
@@ -67,7 +69,8 @@ window.MPBA_DATA = {
           "icon": "users",
           "visible": true,
           "featured": false,
-          "highlight": false
+          "highlight": false,
+          "preview": ""
         }
       ]
     },
@@ -84,7 +87,8 @@ window.MPBA_DATA = {
           "icon": "school",
           "visible": true,
           "featured": false,
-          "highlight": false
+          "highlight": false,
+          "preview": ""
         },
         {
           "id": "l5",
@@ -94,7 +98,8 @@ window.MPBA_DATA = {
           "icon": "youtube",
           "visible": true,
           "featured": false,
-          "highlight": false
+          "highlight": false,
+          "preview": ""
         }
       ]
     },
@@ -111,7 +116,8 @@ window.MPBA_DATA = {
           "icon": "link",
           "visible": true,
           "featured": false,
-          "highlight": true
+          "highlight": true,
+          "preview": ""
         },
         {
           "id": "lk9l0jg3",
@@ -121,7 +127,8 @@ window.MPBA_DATA = {
           "icon": "youtube",
           "visible": true,
           "featured": false,
-          "highlight": false
+          "highlight": false,
+          "preview": ""
         }
       ]
     }
