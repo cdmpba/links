@@ -118,6 +118,30 @@ h1 span{background:linear-gradient(100deg,var(--ink) 25%,color-mix(in srgb,var(-
 .card.hl .ar{width:38px;height:38px;border-radius:50%;display:grid;place-items:center;background:var(--c);color:#fff;margin-top:0}
 .card.hl:hover .ar{color:#fff;transform:rotate(-45deg)}
 
+/* Vista previa del destino al pasar el mouse */
+.pvw{position:fixed;left:0;top:0;z-index:30;pointer-events:none;will-change:transform}
+.pvt{width:340px;border-radius:18px;overflow:hidden;background:var(--tile);border:1px solid var(--line);
+  box-shadow:0 34px 70px -24px rgba(6,10,40,.55),0 10px 24px -14px rgba(6,10,40,.35);
+  opacity:0;transform:scale(.92) translateY(6px);transform-origin:var(--ox,0) var(--oy,0);transition:opacity .18s ease,transform .22s cubic-bezier(.2,.8,.2,1)}
+.pvw.on .pvt{opacity:1;transform:none}
+.pvt .pb{display:flex;align-items:center;gap:9px;padding:10px 12px;border-bottom:1px solid var(--line);font:500 12.5px/1.2 var(--fb);color:var(--ink2)}
+.pvt .pb i{width:22px;height:22px;border-radius:7px;display:grid;place-items:center;color:#fff;background:var(--pc);flex:none}
+.pvt .pb span{flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pvt .pb b{font-weight:600;color:var(--pc);font-size:11.5px;letter-spacing:.02em;flex:none}
+.pvt .ps{position:relative;margin:8px;border-radius:12px;overflow:hidden;aspect-ratio:16/10;background:color-mix(in srgb,var(--pc) 10%,var(--tile))}
+.pvt .ps img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:top;opacity:0;transition:opacity .25s}
+.pvt.ok .ps img{opacity:1}
+.pvt .sk{position:absolute;inset:0;background:linear-gradient(100deg,transparent 30%,color-mix(in srgb,var(--ink) 8%,transparent) 50%,transparent 70%);background-size:220% 100%;animation:sk 1.3s linear infinite}
+.pvt.ok .sk,.pvt.err .sk{display:none}
+@keyframes sk{from{background-position:120% 0}to{background-position:-120% 0}}
+.pvt .pf{position:absolute;inset:0;display:none;place-items:center;align-content:center;gap:10px;text-align:center;color:var(--pc);font:600 13px/1.3 var(--fh);padding:16px;
+  background:radial-gradient(circle at 30% 20%,color-mix(in srgb,var(--pc) 22%,transparent),transparent 60%)}
+.pvt .pf .big{width:58px;height:58px;border-radius:18px;display:grid;place-items:center;color:#fff;background:linear-gradient(140deg,var(--pc),color-mix(in srgb,var(--pc) 60%,#0b1238))}
+.pvt .pf small{display:block;color:var(--ink3);font:500 12px/1.3 var(--fb)}
+.pvt.err .pf{display:grid}
+.pvt .wt{position:absolute;left:10px;bottom:10px;font:500 11.5px/1 var(--fb);color:var(--ink2);background:var(--tile);padding:6px 9px;border-radius:99px;display:none}
+.pvt.wait .wt{display:block}
+
 footer{margin-top:56px;padding-top:28px;border-top:1px solid var(--line);display:flex;flex-wrap:wrap;gap:16px;justify-content:space-between;align-items:center;color:var(--ink3);font-size:13.5px}
 .soc{display:flex;gap:10px}
 .soc a{width:40px;height:40px;border-radius:12px;display:grid;place-items:center;border:1px solid var(--line);color:var(--ink2);transition:.2s}
@@ -167,6 +191,10 @@ footer{margin-top:56px;padding-top:28px;border-top:1px solid var(--line);display
   </footer>
 </div>
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
+<div class="pvw" id="pvw" aria-hidden="true"><div class="pvt" id="pvt">
+  <div class="pb"><i id="pvi"></i><span id="pvh"></span><b>Abrir ↗</b></div>
+  <div class="ps"><div class="sk"></div><img id="pvimg" alt="" referrerpolicy="no-referrer"><div class="pf"><span class="big" id="pvbig"></span><span id="pvft"></span></div><span class="wt">Generando vista previa…</span></div>
+</div></div>
 
 <script src="assets/core.js"></script>
 <script src="assets/enlaces.js"></script>
@@ -194,8 +222,10 @@ footer{margin-top:56px;padding-top:28px;border-top:1px solid var(--line);display
       '--line': dark ? 'rgba(255,255,255,.10)' : 'rgba(18,26,69,.11)',
       '--shadow': dark ? 'rgba(0,0,0,.55)' : 'rgba(18,26,69,.22)',
       '--blob': dark ? '.42' : '.2', '--gridop': dark ? '.35' : '.6',
-      '--blur': T.cards === 'glass' ? '14px' : '0px'
+      '--blur': T.cards === 'glass' ? '14px' : '0px',
+      '--tile': dark ? 'color-mix(in srgb,' + T.bg + ' 86%,#fff)' : '#ffffff'
     };
+    PV_ON = T.preview !== false;
     var card = {
       glass:   dark ? ['rgba(255,255,255,.055)','rgba(255,255,255,.09)'] : ['rgba(255,255,255,.62)','rgba(255,255,255,.9)'],
       solid:   dark ? ['color-mix(in srgb,' + T.bg + ' 88%,#fff)','color-mix(in srgb,' + T.bg + ' 80%,#fff)'] : ['#ffffff','#ffffff'],
@@ -225,7 +255,7 @@ footer{margin-top:56px;padding-top:28px;border-top:1px solid var(--line);display
     if (src) { var im = new Image(); im.alt = 'Logo ' + (P.title||''); im.src = src; lg.appendChild(im); }
     else lg.innerHTML = '<div class="mono" aria-label="MP">MP<i style="background:var(--c2);top:-6px"></i><i style="background:var(--c1);top:5px"></i><i style="background:var(--c3);top:16px"></i></div>';
 
-    var main = $('main'), n = 6, featDone = false; main.innerHTML = '';
+    var main = $('main'), n = 6, featDone = false; main.innerHTML = ''; links = []; close();
     (D.sections||[]).forEach(function(s){
       var links = (s.links||[]).filter(function(l){return l.visible!==false && l.title && l.url});
       var c = pal[s.color] || pal.blue, rest = [];
@@ -236,6 +266,7 @@ footer{margin-top:56px;padding-top:28px;border-top:1px solid var(--line);display
           a.innerHTML = '<span class="ic">' + IC(l.icon,28) + '</span>';
           var tx = el('div'); tx.appendChild(el('div','lbl','Destacado')); tx.appendChild(el('div','t',l.title)); if (l.desc) tx.appendChild(el('div','d',l.desc));
           a.appendChild(tx); var go = el('span','go'); go.innerHTML = ARROW; a.appendChild(go);
+          hover(a, l, T.accent);
           main.insertBefore(a, main.firstChild); /* el principal siempre encabeza la página */
         } else rest.push(l);
       });
@@ -251,6 +282,7 @@ footer{margin-top:56px;padding-top:28px;border-top:1px solid var(--line);display
         var hu = host(l.url); if (hu) tx.appendChild(el('div','u',hu));
         a.appendChild(tx); var ar = el('span','ar'); ar.innerHTML = ARROW; a.appendChild(ar);
         a.addEventListener('pointermove', function(e){var r=a.getBoundingClientRect();a.style.setProperty('--mx',(e.clientX-r.left)+'px');a.style.setProperty('--my',(e.clientY-r.top)+'px')});
+        hover(a, l, c);
         g.appendChild(a);
       });
       sec.appendChild(g); main.appendChild(sec);
@@ -264,6 +296,87 @@ footer{margin-top:56px;padding-top:28px;border-top:1px solid var(--line);display
       a.innerHTML = IC(s.type,19); soc.appendChild(a);
     });
     first = false;
+    warmAll();
+  }
+
+  /* ---------- Vista previa del destino al pasar el mouse ----------
+     Captura automática del sitio (servicio público mShots de WordPress.com).
+     Solo en dispositivos con mouse; en celulares no hay "pasar el mouse". */
+  var PV_ON = true, PV_W = 640;
+  var CAN_HOVER = !!(window.matchMedia && matchMedia('(hover:hover) and (pointer:fine)').matches);
+  var shots = {}, links = [], pvCur = null, pvTimer = 0, mx = 0, my = 0, raf = 0;
+  var pvw = $('pvw'), pvt = $('pvt'), pvimg = $('pvimg');
+  function shotSrc(u, n){ return 'https://s.wordpress.com/mshots/v1/' + encodeURIComponent(u) + '?w=' + PV_W + '&h=400' + (n ? '&r=' + n : ''); }
+  function shot(u){
+    var s = shots[u] || (shots[u] = {state:'wait', tries:0, busy:false, timer:0});
+    if (s.state !== 'wait' || s.busy || s.timer) return s;   /* ya hay un pedido en curso o programado */
+    s.busy = true;
+    var im = new Image(); im.referrerPolicy = 'no-referrer';
+    im.onload = function(){
+      s.busy = false;
+      if (im.naturalWidth === PV_W) { s.state = 'ok'; s.src = im.src; }
+      else if (++s.tries <= 6) s.timer = setTimeout(function(){ s.timer = 0; shot(u); }, 2500);   /* el servicio todavía la está generando */
+      else s.state = 'err';
+      paint();
+    };
+    im.onerror = function(){ s.busy = false; s.state = 'err'; paint(); };
+    im.src = shotSrc(u, s.tries);
+    return s;
+  }
+  function isWeb(u){ return /^https?:\/\//i.test(u || ''); }
+  function hover(a, l, color){
+    if (!CAN_HOVER) return;
+    links.push(l.url);
+    a.addEventListener('mouseenter', function(e){
+      if (!PV_ON) return;
+      mx = e.clientX; my = e.clientY;
+      clearTimeout(pvTimer);
+      pvTimer = setTimeout(function(){ pvOpen(l, color); }, 180);
+    });
+    a.addEventListener('mousemove', function(e){ mx = e.clientX; my = e.clientY; if (pvCur) place(); });
+    a.addEventListener('mouseleave', close);
+    a.addEventListener('click', close);
+  }
+  function pvOpen(l, color){
+    pvCur = l;
+    pvt.style.setProperty('--pc', color);
+    $('pvi').innerHTML = IC(l.icon, 14);
+    $('pvh').textContent = host(l.url) || l.url.replace(/^(mailto|tel):/i, '');
+    $('pvbig').innerHTML = IC(l.icon, 28);
+    $('pvft').innerHTML = ''; var t = el('span', null, l.title); $('pvft').appendChild(t);
+    $('pvft').appendChild(el('small', null, isWeb(l.url) ? 'Vista previa no disponible' : (/^mailto:/i.test(l.url) ? 'Enviar un correo' : 'Llamar')));
+    paint(); place();
+    pvw.classList.add('on');
+  }
+  function paint(){
+    if (!pvCur) return;
+    var s = isWeb(pvCur.url) ? shot(pvCur.url) : {state:'err'};
+    pvt.classList.toggle('ok', s.state === 'ok');
+    pvt.classList.toggle('err', s.state === 'err');
+    pvt.classList.toggle('wait', s.state === 'wait' && s.tries > 0);
+    if (s.state === 'ok') { if (pvimg.getAttribute('src') !== s.src) pvimg.src = s.src; }
+    else pvimg.removeAttribute('src');
+  }
+  function place(){
+    if (raf) return;
+    raf = requestAnimationFrame(function(){
+      raf = 0;
+      var w = pvt.offsetWidth, h = pvt.offsetHeight, vw = innerWidth, vh = innerHeight, gap = 22;
+      var right = mx + gap + w <= vw - 12, below = my + gap + h <= vh - 12;
+      var x = right ? mx + gap : Math.max(12, mx - gap - w);
+      var y = below ? my + gap : Math.max(12, my - gap - h);
+      pvt.style.setProperty('--ox', right ? '0' : '100%'); pvt.style.setProperty('--oy', below ? '0' : '100%');
+      pvw.style.transform = 'translate3d(' + Math.round(x) + 'px,' + Math.round(y) + 'px,0)';
+    });
+  }
+  function close(){ clearTimeout(pvTimer); pvCur = null; pvw.classList.remove('on'); }
+  window.addEventListener('scroll', close, {passive:true});
+  window.addEventListener('blur', close);
+  /* Pide las capturas en segundo plano para que al pasar el mouse ya estén listas */
+  function warmAll(){
+    if (!CAN_HOVER || !PV_ON) return;
+    var go = function(){ links.filter(isWeb).forEach(function(u){ shot(u); }); };
+    if (window.requestIdleCallback) requestIdleCallback(go, {timeout:2500}); else setTimeout(go, 1200);
   }
 
   /* Datos publicados (se pide siempre la versión vigente, sin quedar atrapados en caché) */
