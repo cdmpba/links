@@ -83,6 +83,7 @@ function clean(array $in): array {
       'cards'  => in_array($t['cards'] ?? '', ['glass','solid','outline'], true) ? $t['cards'] : 'glass',
       'radius' => max(6, min(30, (int)($t['radius'] ?? 22))),
       'glow'   => !empty($t['glow']), 'grid' => !empty($t['grid']), 'motion' => !empty($t['motion']),
+      'preview' => !array_key_exists('preview', $t) || !empty($t['preview']),
       'palette'=> $pal,
     ],
     'sections' => [], 'social' => [],
