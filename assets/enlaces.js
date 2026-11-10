@@ -70,7 +70,7 @@ window.MPBA_DATA = {
           "visible": true,
           "featured": false,
           "highlight": false,
-          "preview": ""
+          "preview": "assets/previews/l3-1794312348158.jpg"
         }
       ]
     },
