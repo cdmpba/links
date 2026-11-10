@@ -324,9 +324,27 @@ footer{margin-top:56px;padding-top:28px;border-top:1px solid var(--line);display
     return s;
   }
   function isWeb(u){ return /^https?:\/\//i.test(u || ''); }
+  /* Imagen propia cargada desde el panel (reemplaza la captura automática) */
+  function ownImg(p){ return /^(assets\/previews\/|uploads\/)[\w.-]+\.(jpe?g|png|webp)$/i.test(p || '') || /^data:image\/(jpeg|png|webp);base64,/.test(p || ''); }
+  function custom(src){
+    var k = 'c:' + src, s = shots[k];
+    if (s) return s;
+    s = shots[k] = {state:'wait', tries:0};
+    var im = new Image();
+    im.onload = function(){ s.state = 'ok'; s.src = src; paint(); };
+    im.onerror = function(){ s.state = 'err'; paint(); };
+    im.src = src;
+    return s;
+  }
+  /* none = sin vista previa · ruta = imagen propia · vacío = captura automática */
+  function stateFor(l){
+    if (l.preview === 'none') return {state:'err'};
+    if (ownImg(l.preview)) return custom(l.preview);
+    return isWeb(l.url) ? shot(l.url) : {state:'err'};
+  }
   function hover(a, l, color){
     if (!CAN_HOVER) return;
-    links.push(l.url);
+    links.push(l);
     a.addEventListener('mouseenter', function(e){
       if (!PV_ON) return;
       mx = e.clientX; my = e.clientY;
@@ -344,13 +362,13 @@ footer{margin-top:56px;padding-top:28px;border-top:1px solid var(--line);display
     $('pvh').textContent = host(l.url) || l.url.replace(/^(mailto|tel):/i, '');
     $('pvbig').innerHTML = IC(l.icon, 28);
     $('pvft').innerHTML = ''; var t = el('span', null, l.title); $('pvft').appendChild(t);
-    $('pvft').appendChild(el('small', null, isWeb(l.url) ? 'Vista previa no disponible' : (/^mailto:/i.test(l.url) ? 'Enviar un correo' : 'Llamar')));
+    $('pvft').appendChild(el('small', null, !isWeb(l.url) ? (/^mailto:/i.test(l.url) ? 'Enviar un correo' : 'Llamar') : (l.preview === 'none' ? (host(l.url) || '') : 'Vista previa no disponible')));
     paint(); place();
     pvw.classList.add('on');
   }
   function paint(){
     if (!pvCur) return;
-    var s = isWeb(pvCur.url) ? shot(pvCur.url) : {state:'err'};
+    var s = stateFor(pvCur);
     pvt.classList.toggle('ok', s.state === 'ok');
     pvt.classList.toggle('err', s.state === 'err');
     pvt.classList.toggle('wait', s.state === 'wait' && s.tries > 0);
@@ -375,7 +393,7 @@ footer{margin-top:56px;padding-top:28px;border-top:1px solid var(--line);display
   /* Pide las capturas en segundo plano para que al pasar el mouse ya estén listas */
   function warmAll(){
     if (!CAN_HOVER || !PV_ON) return;
-    var go = function(){ links.filter(isWeb).forEach(function(u){ shot(u); }); };
+    var go = function(){ links.forEach(function(l){ stateFor(l); }); };
     if (window.requestIdleCallback) requestIdleCallback(go, {timeout:2500}); else setTimeout(go, 1200);
   }
 
