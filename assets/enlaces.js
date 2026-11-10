@@ -88,7 +88,7 @@ window.MPBA_DATA = {
           "visible": true,
           "featured": false,
           "highlight": false,
-          "preview": ""
+          "preview": "assets/previews/l4-1794311938188.jpg"
         },
         {
           "id": "l5",
