@@ -1,201 +1,72 @@
-<?php
-/**
- * API del panel de enlaces MPBA (solo para el servidor definitivo).
- * Si este archivo está presente y PHP funciona, admin.html deja el modo demostración
- * y guarda los cambios de verdad, con contraseña real.
- *
- * Escribe:  data/links.json   (copia maestra, privada)
- *           assets/enlaces.js (lo que lee la landing)
- * Requiere: PHP 8.0+, permiso de escritura en data/, data/backups/, uploads/ y assets/enlaces.js
- */
-declare(strict_types=1);
+/* Íconos (trazos 24x24, estilo línea). Compartidos por la landing y el admin. */
+window.MPBA_ICONS = {
+  globe:    { label: "Sitio web",     d: '<circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.6 3.8 5.6 3.8 9s-1.3 6.4-3.8 9c-2.5-2.6-3.8-5.6-3.8-9S9.5 5.6 12 3z"/>' },
+  map:      { label: "Mapa",          d: '<path d="M9 4 3 6.5v13.5L9 17.5l6 2.5 6-2.5V4l-6 2.5L9 4z"/><path d="M9 4v13.5M15 6.5V20"/>' },
+  pin:      { label: "Ubicación",     d: '<path d="M12 21s-7-6.2-7-11.5A7 7 0 0 1 19 9.5C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/>' },
+  heart:    { label: "Acompañamiento",d: '<path d="M12 20s-7.5-4.6-7.5-10.2A4.3 4.3 0 0 1 12 7.2a4.3 4.3 0 0 1 7.5 2.6C19.5 15.4 12 20 12 20z"/><path d="M8.5 12h2l1-2 1.5 4 1-2h1.5"/>' },
+  school:   { label: "Capacitación",  d: '<path d="m2.5 9 9.5-5 9.5 5-9.5 5-9.5-5z"/><path d="M6.5 11.2V16c1.6 1.6 3.4 2.4 5.5 2.4s3.9-.8 5.5-2.4v-4.8M21.5 9v5.5"/>' },
+  youtube:  { label: "YouTube",       d: '<rect x="2.5" y="5.5" width="19" height="13" rx="4"/><path d="m10.2 9.2 4.8 2.8-4.8 2.8V9.2z" fill="currentColor" stroke="none"/>' },
+  doc:      { label: "Documento",     d: '<path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8l-5-5z"/><path d="M14 3v5h5M8.5 13h7M8.5 16.5h5"/>' },
+  scale:    { label: "Justicia",      d: '<path d="M12 4v16M7 20h10M5 7h14M12 4l-1 3h2l-1-3z"/><path d="m5 7-2.5 6a2.8 2.8 0 0 0 5 0L5 7zM19 7l-2.5 6a2.8 2.8 0 0 0 5 0L19 7z"/>' },
+  book:     { label: "Biblioteca",    d: '<path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H20v15H6.5A2.5 2.5 0 0 0 4 20.5v-15z"/><path d="M4 20.5A2.5 2.5 0 0 0 6.5 23H20v-5"/>' },
+  news:     { label: "Novedades",     d: '<rect x="3" y="4" width="15" height="16" rx="2"/><path d="M18 8h2a1 1 0 0 1 1 1v9a2 2 0 0 1-2 2H5M7 8h7M7 12h7M7 16h4"/>' },
+  phone:    { label: "Teléfono",      d: '<path d="M5 3.5h3.5l1.8 4.6-2.3 1.4a11 11 0 0 0 6.5 6.5l1.4-2.3 4.6 1.8V19a2 2 0 0 1-2 2A17 17 0 0 1 3 5.5a2 2 0 0 1 2-2z"/>' },
+  mail:     { label: "Correo",        d: '<rect x="3" y="5" width="18" height="14" rx="2.5"/><path d="m3.5 6.5 8.5 6.5 8.5-6.5"/>' },
+  alert:    { label: "Denuncias",     d: '<path d="M12 3.5 2.5 20h19L12 3.5z"/><path d="M12 10v4.5M12 17.2v.3"/>' },
+  users:    { label: "Personas",      d: '<circle cx="9" cy="8" r="3.5"/><path d="M2.5 20a6.5 6.5 0 0 1 13 0M16 4.8a3.5 3.5 0 0 1 0 6.4M18 14a6.5 6.5 0 0 1 3.5 6"/>' },
+  calendar: { label: "Agenda",        d: '<rect x="3" y="5" width="18" height="16" rx="2.5"/><path d="M3 10h18M8 3v4M16 3v4"/>' },
+  instagram:{ label: "Instagram",     d: '<rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.3" cy="6.7" r=".6" fill="currentColor"/>' },
+  facebook: { label: "Facebook",      d: '<path d="M14 21v-7.5h2.6l.4-3H14V8.6c0-.9.3-1.6 1.6-1.6H17V4.3c-.3 0-1.2-.1-2.2-.1-2.2 0-3.8 1.4-3.8 3.9v2.4H8.5v3H11V21"/>' },
+  x:        { label: "X (Twitter)",   d: '<path d="M4 4l16 16M20 4 4 20" />' },
+  linkedin: { label: "LinkedIn",      d: '<rect x="3" y="3" width="18" height="18" rx="3"/><path d="M8 10.5V17M8 7.5v.3M12 17v-6.5M12 13.5c0-1.7 1-3 2.5-3s2.5 1 2.5 3V17"/>' },
+  link:     { label: "Enlace",        d: '<path d="M10 14a4.5 4.5 0 0 0 6.4 0l3-3a4.5 4.5 0 0 0-6.4-6.4l-1 1"/><path d="M14 10a4.5 4.5 0 0 0-6.4 0l-3 3a4.5 4.5 0 0 0 6.4 6.4l1-1"/>' }
+};
+window.MPBA_ICON = function (name, size) {
+  var i = window.MPBA_ICONS[name] || window.MPBA_ICONS.link;
+  var s = size || 24;
+  return '<svg viewBox="0 0 24 24" width="' + s + '" height="' + s + '" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' + i.d + '</svg>';
+};
+/* Paleta institucional (restyling del isologo). Son los únicos colores de la página y del panel. */
+window.MPBA_BRAND = { blue: "#013D70", green: "#5FAC5E", sky: "#78C2FF", red: "#EC184F" };
+window.MPBA_SLOTS = { blue: "Azul oscuro", green: "Verde", sky: "Celeste", red: "Rojo" };
+/* Colores de versiones anteriores que ya no existen: se reemplazan por uno de la paleta */
+window.MPBA_SLOT_MAP = { gold: "sky", violet: "blue" };
+window.MPBA_SLOT = function (k) { k = window.MPBA_SLOT_MAP[k] || k; return window.MPBA_BRAND[k] ? k : "blue"; };
+/* Color del texto o ícono que va encima de cada color (el celeste es claro: lleva azul oscuro) */
+window.MPBA_ON = function (hex) { return String(hex).toUpperCase() === window.MPBA_BRAND.sky ? window.MPBA_BRAND.blue : "#FFFFFF"; };
 
-const ROOT       = __DIR__;
-const DATA_DIR   = ROOT . '/data';
-const MASTER     = DATA_DIR . '/links.json';
-const PUBLIC_JS  = ROOT . '/assets/enlaces.js';
-const AUTH_FILE  = DATA_DIR . '/auth.json';
-const TRIES_FILE = DATA_DIR . '/attempts.json';
-const BACKUP_DIR = DATA_DIR . '/backups';
-const UPLOAD_DIR = ROOT . '/uploads';
-const MAX_TRIES  = 5;
-const LOCK_SECS  = 900;
-const IDLE_SECS  = 7200;
-const ICONS  = ['globe','map','pin','heart','school','youtube','doc','scale','book','news','phone','mail','alert','users','calendar','instagram','facebook','x','linkedin','link'];
-/* Paleta institucional (restyling del isologo): los únicos colores permitidos */
-const BRAND    = ['blue' => '#013D70', 'green' => '#5FAC5E', 'sky' => '#78C2FF', 'red' => '#EC184F'];
-const SLOT_MAP = ['gold' => 'sky', 'violet' => 'blue'];   /* colores de versiones anteriores */
-const FONTS  = ['moderna','clasica','geometrica','sistema'];
+/* Tipografías disponibles: [títulos, texto]. */
+window.MPBA_FONTS = {
+  moderna:    { label: "Moderna",     h: "Sora",              b: "Figtree" },
+  clasica:    { label: "Clásica",     h: "Source Serif 4",    b: "Figtree" },
+  geometrica: { label: "Geométrica",  h: "Plus Jakarta Sans", b: "Plus Jakarta Sans" },
+  sistema:    { label: "Del sistema", h: "system-ui",         b: "system-ui" }
+};
 
-$https = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') || (($_SERVER['HTTP_X_FORWARDED_PROTO'] ?? '') === 'https');
-session_name('mpba_admin');
-session_set_cookie_params(['lifetime' => 0, 'path' => '/', 'httponly' => true, 'secure' => $https, 'samesite' => 'Strict']);
-session_start();
-header('Content-Type: application/json; charset=utf-8');
-header('X-Content-Type-Options: nosniff');
-header('Cache-Control: no-store');
-foreach ([DATA_DIR, BACKUP_DIR, UPLOAD_DIR] as $d) { if (!is_dir($d)) @mkdir($d, 0775, true); }
+/* Estilos predefinidos: cambian fondo, tipografía y efectos; los colores son siempre los institucionales. */
+window.MPBA_PRESETS = {
+  noche: { label: "Noche institucional", theme: {
+    mode: "dark", bg: "#013D70", accent: "#78C2FF", font: "moderna", layout: "grid", cards: "glass", radius: 22, glow: true, grid: true, motion: true, preview: true } },
+  dia: { label: "Día institucional", theme: {
+    mode: "light", bg: "#f2f5fa", accent: "#013D70", font: "moderna", layout: "grid", cards: "solid", radius: 20, glow: true, grid: true, motion: true, preview: true } },
+  celeste: { label: "Celeste y blanco", theme: {
+    mode: "light", bg: "#eaf6fd", accent: "#013D70", font: "clasica", layout: "list", cards: "solid", radius: 16, glow: true, grid: false, motion: true, preview: true } },
+  sobrio: { label: "Sobrio", theme: {
+    mode: "dark", bg: "#14161c", accent: "#78C2FF", font: "sistema", layout: "list", cards: "outline", radius: 12, glow: false, grid: false, motion: false, preview: true } }
+};
 
-/* ---------- utilidades ---------- */
-function jread(string $f, $def) { $s = @file_get_contents($f); if ($s === false) return $def; $v = json_decode($s, true); return $v === null ? $def : $v; }
-function atomic(string $f, string $s): bool { $t = $f . '.tmp' . bin2hex(random_bytes(4)); return file_put_contents($t, $s, LOCK_EX) !== false && rename($t, $f); }
-function jwrite(string $f, $v): bool { return atomic($f, json_encode($v, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES)); }
-function out($v, int $code = 200): void { http_response_code($code); echo json_encode($v, JSON_UNESCAPED_UNICODE); exit; }
-function authed(): bool {
-  if (empty($_SESSION['ok'])) return false;
-  if (time() - ($_SESSION['t'] ?? 0) > IDLE_SECS) { $_SESSION = []; return false; }
-  $_SESSION['t'] = time(); return true;
-}
-function csrf(): string { if (empty($_SESSION['csrf'])) $_SESSION['csrf'] = bin2hex(random_bytes(24)); return $_SESSION['csrf']; }
-function check_csrf(): void { if (!hash_equals(csrf(), (string)($_SERVER['HTTP_X_CSRF'] ?? ''))) out(['error' => 'Sesión vencida. Recargá la página.'], 403); }
-function ip(): string { return $_SERVER['REMOTE_ADDR'] ?? '0'; }
-function locked(): int { $a = jread(TRIES_FILE, []); $r = $a[ip()] ?? null; return ($r && $r['n'] >= MAX_TRIES && time() - $r['t'] < LOCK_SECS) ? LOCK_SECS - (time() - $r['t']) : 0; }
-function fail(): void { $a = jread(TRIES_FILE, []); $r = $a[ip()] ?? ['n' => 0, 't' => time()]; if (time() - $r['t'] > LOCK_SECS) $r = ['n' => 0, 't' => time()]; $r['n']++; $r['t'] = time(); $a[ip()] = $r; jwrite(TRIES_FILE, $a); }
-function clear_fail(): void { $a = jread(TRIES_FILE, []); unset($a[ip()]); jwrite(TRIES_FILE, $a); }
-function str($v, int $max): string { $v = is_string($v) ? trim(preg_replace('/\s+/u', ' ', $v)) : ''; return mb_substr($v, 0, $max); }
-function url_ok($u): string { $u = str($u, 600); return preg_match('~^(https?://[^\s<>"]+\.[^\s<>"]+|mailto:[^\s<>"]+|tel:[+0-9 ()-]+)$~i', $u) ? $u : ''; }
-function slug($v, string $p): string { $v = is_string($v) ? preg_replace('/[^a-z0-9_-]/i', '', $v) : ''; return $v !== '' ? substr($v, 0, 24) : $p . bin2hex(random_bytes(4)); }
-/* Vista previa por enlace: '' automática, 'none' sin vista previa, o ruta de una imagen propia */
-function prev_ok($v): string { return $v === 'none' ? 'none' : ((is_string($v) && preg_match('~^(uploads/|assets/previews/)[a-z0-9_.-]+\.(jpe?g|png|webp)$~i', $v)) ? $v : ''); }
-function hex($v, string $def): string { return (is_string($v) && preg_match('/^#[0-9a-f]{6}$/i', $v)) ? strtolower($v) : $def; }
-
-function load(): array {
-  $d = jread(MASTER, null);
-  if (is_array($d)) return $d;
-  $js = (string)@file_get_contents(PUBLIC_JS);
-  $json = preg_replace(['/^\s*window\.MPBA_DATA\s*=\s*/', '/;\s*$/'], '', $js);
-  return json_decode($json, true) ?: ['profile' => [], 'theme' => [], 'sections' => [], 'social' => []];
-}
-function clean(array $in): array {
-  $p = $in['profile'] ?? [];
-  $logo = is_string($p['logo'] ?? null) ? trim($p['logo']) : '';
-  $okLogo = preg_match('~^(uploads/[a-z0-9_.-]+|assets/[a-z0-9_./-]+\.(png|jpe?g|webp|svg)|https://[^\s<>"]+)$~i', $logo)
-         || (strlen($logo) < 400000 && preg_match('~^data:image/(png|jpeg|webp);base64,[A-Za-z0-9+/=]+$~', $logo));
-  $t = $in['theme'] ?? [];
-  $pal = [];
-  $pal = BRAND;
-  foreach (SLOT_MAP as $k => $v) $pal[$k] = BRAND[$v];
-  $dark = ($t['mode'] ?? '') !== 'light';
-  $acc = strtoupper((string)($t['accent'] ?? ''));
-  if (!in_array($acc, BRAND, true) || ($dark && $acc === BRAND['blue'])) $acc = $dark ? BRAND['sky'] : BRAND['blue'];
-  $o = [
-    'profile' => ['title' => str($p['title'] ?? '', 80), 'subtitle' => str($p['subtitle'] ?? '', 200), 'kicker' => str($p['kicker'] ?? '', 60),
-                  'handle' => str($p['handle'] ?? '', 40), 'logo' => $okLogo ? $logo : ''],
-    'theme' => [
-      'mode'   => ($t['mode'] ?? '') === 'light' ? 'light' : 'dark',
-      'bg'     => hex($t['bg'] ?? null, '#0b1238'),
-      'accent' => $acc,
-      'font'   => in_array($t['font'] ?? '', FONTS, true) ? $t['font'] : 'moderna',
-      'layout' => ($t['layout'] ?? '') === 'list' ? 'list' : 'grid',
-      'cards'  => in_array($t['cards'] ?? '', ['glass','solid','outline'], true) ? $t['cards'] : 'glass',
-      'radius' => max(6, min(30, (int)($t['radius'] ?? 22))),
-      'glow'   => !empty($t['glow']), 'grid' => !empty($t['grid']), 'motion' => !empty($t['motion']),
-      'preview' => !array_key_exists('preview', $t) || !empty($t['preview']),
-      'palette'=> $pal,
-    ],
-    'sections' => [], 'social' => [],
-  ];
-  $feat = false;
-  foreach (array_slice($in['sections'] ?? [], 0, 20) as $s) {
-    if (!is_array($s)) continue;
-    $sec = ['id' => slug($s['id'] ?? '', 's'), 'title' => str($s['title'] ?? '', 60),
-            'color' => isset(BRAND[SLOT_MAP[$s['color'] ?? ''] ?? ($s['color'] ?? '')]) ? (SLOT_MAP[$s['color']] ?? $s['color']) : 'blue', 'links' => []];
-    foreach (array_slice($s['links'] ?? [], 0, 40) as $l) {
-      if (!is_array($l)) continue;
-      $u = url_ok($l['url'] ?? ''); $ti = str($l['title'] ?? '', 100);
-      if ($u === '' || $ti === '') continue;
-      $f = !empty($l['featured']) && !$feat; if ($f) $feat = true;
-      $sec['links'][] = ['id' => slug($l['id'] ?? '', 'l'), 'title' => $ti, 'desc' => str($l['desc'] ?? '', 160), 'url' => $u,
-        'icon' => in_array($l['icon'] ?? '', ICONS, true) ? $l['icon'] : 'link', 'visible' => !empty($l['visible']), 'featured' => $f,
-        'highlight' => !empty($l['highlight']) && !$f,
-        'preview' => prev_ok($l['preview'] ?? '')];
-    }
-    if ($sec['title'] !== '') $o['sections'][] = $sec;
-  }
-  foreach (array_slice($in['social'] ?? [], 0, 10) as $s) {
-    $u = url_ok($s['url'] ?? '');
-    if ($u !== '') $o['social'][] = ['type' => in_array($s['type'] ?? '', ICONS, true) ? $s['type'] : 'link', 'url' => $u];
-  }
-  return $o;
-}
-function publish(array $c): bool {
-  $js = 'window.MPBA_DATA = ' . json_encode($c, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_HEX_TAG) . ";\n";
-  return jwrite(MASTER, $c) && atomic(PUBLIC_JS, $js);
-}
-function backups(): array {
-  $f = glob(BACKUP_DIR . '/links-*.json') ?: []; rsort($f);
-  return array_map(fn($x) => ['file' => basename($x), 'when' => date('d/m/Y H:i', filemtime($x))], $f);
-}
-function snapshot(): void {
-  jwrite(BACKUP_DIR . '/links-' . date('Ymd-His') . '-' . bin2hex(random_bytes(2)) . '.json', load());
-  $f = glob(BACKUP_DIR . '/links-*.json') ?: []; rsort($f);
-  foreach (array_slice($f, 30) as $old) @unlink($old);
-}
-
-/* ---------- acciones ---------- */
-$auth = jread(AUTH_FILE, []);
-$needSetup = empty($auth['hash']);
-$a = $_GET['a'] ?? '';
-$isPost = $_SERVER['REQUEST_METHOD'] === 'POST';
-
-if ($a === 'session') {
-  $ok = authed();
-  out(['mode' => 'server', 'needSetup' => $needSetup, 'logged' => $ok, 'csrf' => csrf(),
-       'data' => $ok ? load() : null, 'backups' => $ok ? backups() : []]);
-}
-if (!$isPost) out(['error' => 'Método no permitido.'], 405);
-check_csrf();
-
-if ($a === 'setup') {
-  if (!$needSetup) out(['error' => 'La contraseña ya está configurada.'], 400);
-  $pw = (string)($_POST['pw'] ?? '');
-  if (mb_strlen($pw) < 10) out(['error' => 'Usá al menos 10 caracteres.'], 400);
-  if ($pw !== (string)($_POST['pw2'] ?? '')) out(['error' => 'Las contraseñas no coinciden.'], 400);
-  jwrite(AUTH_FILE, ['hash' => password_hash($pw, PASSWORD_DEFAULT), 'since' => date('c')]);
-  session_regenerate_id(true); $_SESSION['ok'] = 1; $_SESSION['t'] = time();
-  out(['ok' => true]);
-}
-if ($a === 'login') {
-  if ($w = locked()) out(['error' => 'Demasiados intentos. Probá de nuevo en ' . ceil($w / 60) . ' min.'], 429);
-  if (!$needSetup && password_verify((string)($_POST['pw'] ?? ''), $auth['hash'])) {
-    clear_fail(); session_regenerate_id(true); $_SESSION['ok'] = 1; $_SESSION['t'] = time();
-    out(['ok' => true]);
-  }
-  fail(); usleep(400000);
-  out(['error' => 'Contraseña incorrecta.'], 401);
-}
-if (!authed()) out(['error' => 'Tenés que iniciar sesión.'], 401);
-
-switch ($a) {
-  case 'logout':
-    $_SESSION = []; session_destroy(); out(['ok' => true]);
-  case 'save':
-    $in = json_decode((string)file_get_contents('php://input'), true);
-    if (!is_array($in)) out(['error' => 'Datos inválidos.'], 400);
-    $c = clean($in); snapshot();
-    if (!publish($c)) out(['error' => 'No se pudo guardar. Revisá los permisos de escritura (data/ y assets/enlaces.js).'], 500);
-    out(['ok' => true, 'data' => $c, 'backups' => backups()]);
-  case 'restore':
-    $f = basename((string)($_POST['file'] ?? ''));
-    if (!preg_match('/^links-[0-9a-f-]+\.json$/', $f) || !is_file(BACKUP_DIR . '/' . $f)) out(['error' => 'Versión no encontrada.'], 404);
-    $c = clean(jread(BACKUP_DIR . '/' . $f, [])); snapshot(); publish($c);
-    out(['ok' => true, 'data' => $c, 'backups' => backups()]);
-  case 'logo':
-    $f = $_FILES['logo'] ?? null;
-    if (!$f || $f['error'] !== UPLOAD_ERR_OK) out(['error' => 'No llegó la imagen.'], 400);
-    if ($f['size'] > 1500000) out(['error' => 'La imagen supera 1,5 MB.'], 400);
-    $info = @getimagesize($f['tmp_name']);
-    $ext = ['image/png' => 'png', 'image/jpeg' => 'jpg', 'image/webp' => 'webp'][$info['mime'] ?? ''] ?? null;
-    if (!$ext) out(['error' => 'Formato no admitido. Usá PNG, JPG o WEBP.'], 400);
-    $name = (($_POST['kind'] ?? '') === 'preview' ? 'prev-' : 'logo-') . date('YmdHis') . '-' . bin2hex(random_bytes(3)) . '.' . $ext;
-    if (!move_uploaded_file($f['tmp_name'], UPLOAD_DIR . '/' . $name)) out(['error' => 'No se pudo guardar la imagen.'], 500);
-    out(['ok' => true, 'path' => 'uploads/' . $name]);
-  case 'password':
-    if (!password_verify((string)($_POST['cur'] ?? ''), $auth['hash'] ?? '')) out(['error' => 'La contraseña actual no es correcta.'], 400);
-    $pw = (string)($_POST['pw'] ?? '');
-    if (mb_strlen($pw) < 10) out(['error' => 'Usá al menos 10 caracteres.'], 400);
-    if ($pw !== (string)($_POST['pw2'] ?? '')) out(['error' => 'Las contraseñas nuevas no coinciden.'], 400);
-    jwrite(AUTH_FILE, ['hash' => password_hash($pw, PASSWORD_DEFAULT), 'since' => date('c')]);
-    out(['ok' => true]);
-}
-out(['error' => 'Acción desconocida.'], 400);
+/* Completa un tema con los valores por defecto y lo ajusta a la paleta institucional. */
+window.MPBA_THEME = function (t) {
+  var d = window.MPBA_PRESETS.noche.theme, B = window.MPBA_BRAND, o = {}, k, ok = false;
+  t = t || {};
+  for (k in d) o[k] = (t[k] === undefined || t[k] === null) ? d[k] : t[k];
+  var dark = o.mode !== "light";
+  for (k in B) if (String(o.accent).toUpperCase() === B[k]) { o.accent = B[k]; ok = true; }
+  if (!ok) o.accent = dark ? B.sky : B.blue;
+  /* El azul oscuro no se distingue sobre un fondo oscuro */
+  if (dark && o.accent === B.blue) o.accent = B.sky;
+  o.palette = {};
+  for (k in B) o.palette[k] = B[k];
+  for (k in window.MPBA_SLOT_MAP) o.palette[k] = B[window.MPBA_SLOT_MAP[k]];
+  return o;
+};
