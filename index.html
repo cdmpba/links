@@ -142,6 +142,35 @@ h1 span{background:linear-gradient(100deg,var(--ink) 25%,color-mix(in srgb,var(-
 .pvt .wt{position:absolute;left:10px;bottom:10px;font:500 11.5px/1 var(--fb);color:var(--ink2);background:var(--tile);padding:6px 9px;border-radius:99px;display:none}
 .pvt.wait .wt{display:block}
 
+/* Celular: captura dentro de los destacados */
+.card.thumb{flex-wrap:wrap;row-gap:14px}
+.card.thumb .ic{display:none}
+.card .th{position:relative;flex:0 0 100%;order:-1;aspect-ratio:2/1;border-radius:calc(var(--r)*.7);overflow:hidden;margin-bottom:2px;
+  background:color-mix(in srgb,var(--c) 12%,var(--card));box-shadow:inset 0 0 0 1px var(--line)}
+.card .th img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:top;opacity:0;transition:opacity .3s}
+.card .th.ok img{opacity:1}
+.card .th .sk{position:absolute;inset:0;background:linear-gradient(100deg,transparent 30%,color-mix(in srgb,var(--ink) 8%,transparent) 50%,transparent 70%);background-size:220% 100%;animation:sk 1.3s linear infinite}
+.card .th.ok .sk{display:none}
+
+/* Celular: mantener apretado un enlace abre una vista previa desde abajo */
+.touch .card,.touch .feat{-webkit-touch-callout:none;-webkit-user-select:none;user-select:none;-webkit-tap-highlight-color:transparent}
+.card.pressing,.feat.pressing{transform:scale(.975);transition:transform .35s ease}
+.shbd{position:fixed;inset:0;z-index:40;background:rgba(6,10,40,.42);backdrop-filter:blur(3px);-webkit-backdrop-filter:blur(3px);opacity:0;pointer-events:none;transition:opacity .25s}
+.sheet{position:fixed;left:12px;right:12px;bottom:12px;z-index:41;max-width:480px;margin:0 auto;border-radius:24px;background:var(--tile);border:1px solid var(--line);
+  padding:8px 14px calc(14px + env(safe-area-inset-bottom));box-shadow:0 -10px 50px -12px rgba(6,10,40,.5);
+  transform:translateY(calc(100% + 24px));transition:transform .32s cubic-bezier(.2,.8,.2,1);visibility:hidden}
+.sheet-on .shbd{opacity:1;pointer-events:auto}
+.sheet-on .sheet{transform:none;visibility:visible}
+.sheet .grab{width:40px;height:5px;border-radius:9px;background:var(--line);margin:4px auto 10px}
+.pvt.in{width:auto;opacity:1;transform:none;box-shadow:none;border:0;background:transparent;border-radius:0}
+.pvt.in .pb{padding:2px 2px 10px;border:0}
+.pvt.in .ps{margin:0}
+.sheet .st{font:600 17px/1.3 var(--fh);margin:14px 2px 4px;color:var(--ink)}
+.sheet .sd{color:var(--ink2);font-size:14.5px;margin:0 2px}
+.sheet .sa{display:flex;gap:10px;margin-top:16px}
+.sheet .sgo{flex:1;display:flex;align-items:center;justify-content:center;gap:8px;height:48px;border-radius:14px;background:var(--pc);color:#fff;font:600 15.5px/1 var(--fh)}
+.sheet .scl{height:48px;padding:0 18px;border-radius:14px;border:1px solid var(--line);background:transparent;color:var(--ink);font:600 15px/1 var(--fb);cursor:pointer}
+html.lock{overflow:hidden}
 footer{margin-top:56px;padding-top:28px;border-top:1px solid var(--line);display:flex;flex-wrap:wrap;gap:16px;justify-content:space-between;align-items:center;color:var(--ink3);font-size:13.5px}
 .soc{display:flex;gap:10px}
 .soc a{width:40px;height:40px;border-radius:12px;display:grid;place-items:center;border:1px solid var(--line);color:var(--ink2);transition:.2s}
@@ -191,6 +220,16 @@ footer{margin-top:56px;padding-top:28px;border-top:1px solid var(--line);display
   </footer>
 </div>
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
+<div class="shbd" id="shbd"></div>
+<div class="sheet" id="sheet" role="dialog" aria-modal="true" aria-labelledby="sht">
+  <div class="grab"></div>
+  <div class="pvt in" id="shv">
+    <div class="pb"><i id="shi"></i><span id="shh"></span></div>
+    <div class="ps"><div class="sk"></div><img id="shimg" alt="" referrerpolicy="no-referrer"><div class="pf"><span class="big" id="shbig"></span><span id="shft"></span></div><span class="wt">Generando vista previa…</span></div>
+  </div>
+  <div class="st" id="sht"></div><div class="sd" id="shd"></div>
+  <div class="sa"><a class="sgo" id="sho" target="_blank" rel="noopener">Abrir <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></a><button type="button" class="scl" id="shc">Cerrar</button></div>
+</div>
 <div class="pvw" id="pvw" aria-hidden="true"><div class="pvt" id="pvt">
   <div class="pb"><i id="pvi"></i><span id="pvh"></span><b>Abrir ↗</b></div>
   <div class="ps"><div class="sk"></div><img id="pvimg" alt="" referrerpolicy="no-referrer"><div class="pf"><span class="big" id="pvbig"></span><span id="pvft"></span></div><span class="wt">Generando vista previa…</span></div>
@@ -255,7 +294,8 @@ footer{margin-top:56px;padding-top:28px;border-top:1px solid var(--line);display
     if (src) { var im = new Image(); im.alt = 'Logo ' + (P.title||''); im.src = src; lg.appendChild(im); }
     else lg.innerHTML = '<div class="mono" aria-label="MP">MP<i style="background:var(--c2);top:-6px"></i><i style="background:var(--c1);top:5px"></i><i style="background:var(--c3);top:16px"></i></div>';
 
-    var main = $('main'), n = 6, featDone = false; main.innerHTML = ''; links = []; close();
+    lastD = D; THUMBS = PV_ON_OF(T) && (!CAN_HOVER || (PREVIEW && innerWidth <= 680));
+    var main = $('main'), n = 6, featDone = false; main.innerHTML = ''; links = []; close(); sheetClose();
     (D.sections||[]).forEach(function(s){
       var links = (s.links||[]).filter(function(l){return l.visible!==false && l.title && l.url});
       var c = pal[s.color] || pal.blue, rest = [];
@@ -266,7 +306,7 @@ footer{margin-top:56px;padding-top:28px;border-top:1px solid var(--line);display
           a.innerHTML = '<span class="ic">' + IC(l.icon,28) + '</span>';
           var tx = el('div'); tx.appendChild(el('div','lbl','Destacado')); tx.appendChild(el('div','t',l.title)); if (l.desc) tx.appendChild(el('div','d',l.desc));
           a.appendChild(tx); var go = el('span','go'); go.innerHTML = ARROW; a.appendChild(go);
-          hover(a, l, T.accent);
+          hover(a, l, T.accent, false);
           main.insertBefore(a, main.firstChild); /* el principal siempre encabeza la página */
         } else rest.push(l);
       });
@@ -282,7 +322,7 @@ footer{margin-top:56px;padding-top:28px;border-top:1px solid var(--line);display
         var hu = host(l.url); if (hu) tx.appendChild(el('div','u',hu));
         a.appendChild(tx); var ar = el('span','ar'); ar.innerHTML = ARROW; a.appendChild(ar);
         a.addEventListener('pointermove', function(e){var r=a.getBoundingClientRect();a.style.setProperty('--mx',(e.clientX-r.left)+'px');a.style.setProperty('--my',(e.clientY-r.top)+'px')});
-        hover(a, l, c);
+        hover(a, l, c, !!l.highlight);
         g.appendChild(a);
       });
       sec.appendChild(g); main.appendChild(sec);
@@ -304,6 +344,12 @@ footer{margin-top:56px;padding-top:28px;border-top:1px solid var(--line);display
      Solo en dispositivos con mouse; en celulares no hay "pasar el mouse". */
   var PV_ON = true, PV_W = 640;
   var CAN_HOVER = !!(window.matchMedia && matchMedia('(hover:hover) and (pointer:fine)').matches);
+  var THUMBS = false, lastD = null;
+  function PV_ON_OF(T){ return T.preview !== false; }
+  if (!CAN_HOVER) document.documentElement.classList.add('touch');
+  /* Avisa a quien espera una captura (miniaturas y hoja del celular) cuando terminó de cargar */
+  function done(s){ if (s.state !== 'wait' && s.subs) { var q = s.subs; s.subs = null; q.forEach(function(f){ f(s); }); } paint(); sheetPaint(); }
+  function track(l, cb){ var s = stateFor(l); if (s.state !== 'wait') cb(s); else (s.subs = s.subs || []).push(cb); return s; }
   var shots = {}, links = [], pvCur = null, pvTimer = 0, mx = 0, my = 0, raf = 0;
   var pvw = $('pvw'), pvt = $('pvt'), pvimg = $('pvimg');
   function shotSrc(u, n){ return 'https://s.wordpress.com/mshots/v1/' + encodeURIComponent(u) + '?w=' + PV_W + '&h=400' + (n ? '&r=' + n : ''); }
@@ -317,9 +363,9 @@ footer{margin-top:56px;padding-top:28px;border-top:1px solid var(--line);display
       if (im.naturalWidth === PV_W) { s.state = 'ok'; s.src = im.src; }
       else if (++s.tries <= 6) s.timer = setTimeout(function(){ s.timer = 0; shot(u); }, 2500);   /* el servicio todavía la está generando */
       else s.state = 'err';
-      paint();
+      done(s);
     };
-    im.onerror = function(){ s.busy = false; s.state = 'err'; paint(); };
+    im.onerror = function(){ s.busy = false; s.state = 'err'; done(s); };
     im.src = shotSrc(u, s.tries);
     return s;
   }
@@ -331,8 +377,8 @@ footer{margin-top:56px;padding-top:28px;border-top:1px solid var(--line);display
     if (s) return s;
     s = shots[k] = {state:'wait', tries:0};
     var im = new Image();
-    im.onload = function(){ s.state = 'ok'; s.src = src; paint(); };
-    im.onerror = function(){ s.state = 'err'; paint(); };
+    im.onload = function(){ s.state = 'ok'; s.src = src; done(s); };
+    im.onerror = function(){ s.state = 'err'; done(s); };
     im.src = src;
     return s;
   }
@@ -342,8 +388,9 @@ footer{margin-top:56px;padding-top:28px;border-top:1px solid var(--line);display
     if (ownImg(l.preview)) return custom(l.preview);
     return isWeb(l.url) ? shot(l.url) : {state:'err'};
   }
-  function hover(a, l, color){
-    if (!CAN_HOVER) return;
+  function hover(a, l, color, hl){
+    if (THUMBS && hl) thumb(a, l);
+    if (!CAN_HOVER) { if (!hl) press(a, l, color); return; }
     links.push(l);
     a.addEventListener('mouseenter', function(e){
       if (!PV_ON) return;
@@ -388,6 +435,71 @@ footer{margin-top:56px;padding-top:28px;border-top:1px solid var(--line);display
     });
   }
   function close(){ clearTimeout(pvTimer); pvCur = null; pvw.classList.remove('on'); }
+
+  /* Destacados en el celular: la captura va dentro de la tarjeta */
+  function thumb(a, l){
+    if (l.preview === 'none' || (!isWeb(l.url) && !ownImg(l.preview))) return;
+    var th = el('span', 'th'), im = el('img'); im.alt = ''; im.referrerPolicy = 'no-referrer';
+    th.appendChild(el('span', 'sk')); th.appendChild(im);
+    a.classList.add('thumb'); a.insertBefore(th, a.firstChild);
+    track(l, function(s){
+      if (s.state === 'ok') { im.src = s.src; th.classList.add('ok'); }
+      else { th.remove(); a.classList.remove('thumb'); }
+    });
+  }
+
+  /* Enlaces comunes en el celular: mantener apretado abre la vista previa */
+  var held = false, shCur = null;
+  var sheet = $('sheet'), shv = $('shv'), shimg = $('shimg');
+  function press(a, l, color){
+    var t = 0, p = 0, sx = 0, sy = 0;
+    function stop(){ clearTimeout(t); clearTimeout(p); a.classList.remove('pressing'); }
+    a.addEventListener('touchstart', function(e){
+      if (!PV_ON) return;
+      var q = e.touches[0]; sx = q.clientX; sy = q.clientY; held = false; stop();
+      p = setTimeout(function(){ a.classList.add('pressing'); }, 120);
+      t = setTimeout(function(){
+        held = true; a.classList.remove('pressing');
+        try { if (navigator.vibrate) navigator.vibrate(10); } catch(x) {}
+        sheetOpen(l, color);
+      }, 450);
+    }, {passive:true});
+    a.addEventListener('touchmove', function(e){ var q = e.touches[0]; if (Math.abs(q.clientX - sx) > 10 || Math.abs(q.clientY - sy) > 10) stop(); }, {passive:true});
+    a.addEventListener('touchend', function(e){ stop(); if (held) e.preventDefault(); });
+    a.addEventListener('touchcancel', stop);
+    a.addEventListener('click', function(e){ if (held) { e.preventDefault(); held = false; } });
+    a.addEventListener('contextmenu', function(e){ e.preventDefault(); });
+  }
+  function sheetOpen(l, color){
+    shCur = l;
+    sheet.style.setProperty('--pc', color); shv.style.setProperty('--pc', color);
+    $('shi').innerHTML = IC(l.icon, 14);
+    $('shh').textContent = host(l.url) || l.url.replace(/^(mailto|tel):/i, '');
+    $('shbig').innerHTML = IC(l.icon, 28);
+    $('shft').innerHTML = ''; $('shft').appendChild(el('span', null, l.title));
+    $('shft').appendChild(el('small', null, !isWeb(l.url) ? (/^mailto:/i.test(l.url) ? 'Enviar un correo' : 'Llamar') : (l.preview === 'none' ? (host(l.url) || '') : 'Vista previa no disponible')));
+    $('sht').textContent = l.title; $('shd').textContent = l.desc || '';
+    var go = $('sho'); go.href = safe(l.url);
+    sheetPaint();
+    document.documentElement.classList.add('sheet-on', 'lock');
+    setTimeout(function(){ go.focus({preventScroll:true}); }, 50);
+  }
+  function sheetPaint(){
+    if (!shCur) return;
+    var s = stateFor(shCur);
+    shv.classList.toggle('ok', s.state === 'ok');
+    shv.classList.toggle('err', s.state === 'err');
+    shv.classList.toggle('wait', s.state === 'wait');
+    if (s.state === 'ok') { if (shimg.getAttribute('src') !== s.src) shimg.src = s.src; }
+    else shimg.removeAttribute('src');
+  }
+  function sheetClose(){ if (!shCur) return; shCur = null; document.documentElement.classList.remove('sheet-on', 'lock'); }
+  $('shbd').addEventListener('click', sheetClose);
+  $('shc').addEventListener('click', sheetClose);
+  $('sho').addEventListener('click', function(){ setTimeout(sheetClose, 150); });
+  document.addEventListener('keydown', function(e){ if (e.key === 'Escape') sheetClose(); });
+  /* En la vista previa del panel, al cambiar entre celular y escritorio se vuelve a armar */
+  if (PREVIEW) { var rz = 0; window.addEventListener('resize', function(){ clearTimeout(rz); rz = setTimeout(function(){ if (lastD) render(lastD); }, 150); }); }
   window.addEventListener('scroll', close, {passive:true});
   window.addEventListener('blur', close);
   /* Pide las capturas en segundo plano para que al pasar el mouse ya estén listas */
