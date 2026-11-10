@@ -40,16 +40,16 @@ window.MPBA_FONTS = {
 /* Estilos predefinidos. */
 window.MPBA_PRESETS = {
   noche: { label: "Noche institucional", theme: {
-    mode: "dark", bg: "#0b1238", accent: "#3b82f6", font: "moderna", layout: "grid", cards: "glass", radius: 22, glow: true, grid: true, motion: true,
+    mode: "dark", bg: "#0b1238", accent: "#3b82f6", font: "moderna", layout: "grid", cards: "glass", radius: 22, glow: true, grid: true, motion: true, preview: true,
     palette: { blue: "#3b82f6", green: "#2fb36b", red: "#ef4b4b", sky: "#36b9e8", gold: "#e8b33a", violet: "#8b7cf6" } } },
   dia: { label: "Día institucional", theme: {
-    mode: "light", bg: "#f2f5fc", accent: "#2346c9", font: "moderna", layout: "grid", cards: "solid", radius: 20, glow: true, grid: true, motion: true,
+    mode: "light", bg: "#f2f5fc", accent: "#2346c9", font: "moderna", layout: "grid", cards: "solid", radius: 20, glow: true, grid: true, motion: true, preview: true,
     palette: { blue: "#2463eb", green: "#1f9d5c", red: "#d93a3a", sky: "#1597c9", gold: "#c98a12", violet: "#6d5ae6" } } },
   celeste: { label: "Celeste y blanco", theme: {
-    mode: "light", bg: "#eaf6fd", accent: "#1386c4", font: "clasica", layout: "list", cards: "solid", radius: 16, glow: true, grid: false, motion: true,
+    mode: "light", bg: "#eaf6fd", accent: "#1386c4", font: "clasica", layout: "list", cards: "solid", radius: 16, glow: true, grid: false, motion: true, preview: true,
     palette: { blue: "#1386c4", green: "#1d9a6c", red: "#cf3f3f", sky: "#2aa6dd", gold: "#b88310", violet: "#5b63d6" } } },
   sobrio: { label: "Sobrio", theme: {
-    mode: "dark", bg: "#14161c", accent: "#5b8def", font: "sistema", layout: "list", cards: "outline", radius: 12, glow: false, grid: false, motion: false,
+    mode: "dark", bg: "#14161c", accent: "#5b8def", font: "sistema", layout: "list", cards: "outline", radius: 12, glow: false, grid: false, motion: false, preview: true,
     palette: { blue: "#5b8def", green: "#3fb67a", red: "#e45d5d", sky: "#4fb7e0", gold: "#d9a640", violet: "#9a88f0" } } }
 };
 
