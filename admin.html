@@ -9,7 +9,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Sora:wght@600;700&family=Figtree:wght@400;500;600&family=Plus+Jakarta+Sans:wght@600&family=Source+Serif+4:opsz,wght@8..60,600&display=swap" rel="stylesheet">
 <style>
-:root{--bg:#f3f5fb;--panel:#fff;--ink:#141a3a;--ink2:#5a6285;--ink3:#8a91b0;--line:#e3e7f2;--pri:#2346c9;--pri2:#1b37a3;--bad:#d93a3a;--r:14px}
+:root{--bg:#f3f6f9;--panel:#fff;--ink:#0d2a45;--ink2:#4a6380;--ink3:#8396aa;--line:#e1e8ef;--pri:#013D70;--pri2:#012c52;--soft:#e9f4ff;--bad:#EC184F;--r:14px}
 *{box-sizing:border-box;margin:0;padding:0}
 body{background:var(--bg);color:var(--ink);font:15px/1.45 Figtree,system-ui,sans-serif}
 button,input,select,textarea{font:inherit;color:inherit}
@@ -32,7 +32,7 @@ label.f{display:block;font-size:12.5px;font-weight:600;color:var(--ink2);margin-
 .hidden{display:none!important}
 
 /* acceso */
-.auth{min-height:100vh;display:grid;place-items:center;padding:20px;background:radial-gradient(900px 500px at 20% 0%,#2c4fd6 0%,transparent 60%),radial-gradient(700px 500px at 100% 100%,#1f9d5c55,transparent 60%),#0b1238}
+.auth{min-height:100vh;display:grid;place-items:center;padding:20px;background:radial-gradient(900px 500px at 20% 0%,#78C2FF66 0%,transparent 60%),radial-gradient(700px 500px at 100% 100%,#5FAC5E55,transparent 60%),#013D70}
 .auth form{width:100%;max-width:400px;background:#fff;border-radius:22px;padding:30px;box-shadow:0 30px 70px -20px rgba(0,0,0,.5)}
 .auth form.wide{max-width:520px}
 .auth h1{font-size:22px;margin:14px 0 4px}.auth .fld{margin-top:16px}
@@ -41,7 +41,7 @@ label.f{display:block;font-size:12.5px;font-weight:600;color:var(--ink2);margin-
 .auth .help a{color:var(--pri);text-decoration:underline}
 .auth .alt{display:block;margin:16px auto 0;font-size:13px;color:var(--ink3);background:none;border:0;cursor:pointer;text-decoration:underline}
 .steps{margin:14px 0 0 18px;font-size:13.5px;color:var(--ink2)}.steps li{margin-bottom:4px}
-.badge{width:46px;height:46px;border-radius:14px;background:#eef2ff;color:var(--pri);display:grid;place-items:center;flex:none}
+.badge{width:46px;height:46px;border-radius:14px;background:var(--soft);color:var(--pri);display:grid;place-items:center;flex:none}
 .err{color:var(--bad);font-size:13.5px;margin-top:12px;min-height:1em}
 
 /* barra */
@@ -74,8 +74,8 @@ label.f{display:block;font-size:12.5px;font-weight:600;color:var(--ink2);margin-
 .seg button{border:0;background:transparent;padding:5px 10px;border-radius:7px;font-size:12.5px;font-weight:600;color:var(--ink2);cursor:pointer}
 .seg button[aria-pressed=true]{background:#fff;color:var(--pri);box-shadow:0 1px 2px rgba(20,26,58,.12)}
 .pvthumb{width:64px;height:40px;border-radius:7px;object-fit:cover;object-position:top;border:1px solid var(--line);background:#f1f3fa}
-.link.is-hl{border-color:#b9c6f3;background:#f4f7ff;box-shadow:inset 3px 0 0 var(--pri)}
-.link.is-feat{border-color:#8ea4f0;background:#eef2ff;box-shadow:inset 3px 0 0 var(--pri),0 6px 18px -12px rgba(35,70,201,.5)}
+.link.is-hl{border-color:#b7d6f2;background:#f4f9ff;box-shadow:inset 3px 0 0 var(--pri)}
+.link.is-feat{border-color:#8fbbe3;background:var(--soft);box-shadow:inset 3px 0 0 var(--pri),0 6px 18px -12px rgba(1,61,112,.45)}
 .empty{padding:16px;border:1px dashed var(--line);border-radius:var(--r);text-align:center;color:var(--ink3);font-size:14px;margin-bottom:10px}
 .grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}.grid2 .w{grid-column:1/-1}
 .logobox{display:flex;align-items:center;gap:14px}
@@ -95,12 +95,19 @@ label.f{display:block;font-size:12.5px;font-weight:600;color:var(--ink2);margin-
 .preset span{display:block;font-size:13px;font-weight:600;margin-top:7px}
 .opts{display:flex;gap:8px;flex-wrap:wrap}
 .opt{border:1px solid var(--line);background:#fff;border-radius:12px;padding:10px 14px;cursor:pointer;font-weight:600;font-size:14px;min-width:96px;text-align:center}
-.opt[aria-pressed=true]{border-color:var(--pri);background:#eef2ff;color:var(--pri);box-shadow:inset 0 0 0 1px var(--pri)}
+.opt[aria-pressed=true]{border-color:var(--pri);background:var(--soft);color:var(--pri);box-shadow:inset 0 0 0 1px var(--pri)}
 .opt .aa{display:block;font-size:22px;line-height:1.1;margin-bottom:2px}
 .colors{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
 .cin{display:flex;align-items:center;gap:10px;border:1px solid var(--line);border-radius:12px;padding:7px 10px;background:#fff}
 .cin input[type=color]{width:34px;height:34px;border:0;padding:0;background:none;cursor:pointer;flex:none}
 .cin input[type=color]::-webkit-color-swatch-wrapper{padding:0}.cin input[type=color]::-webkit-color-swatch{border:1px solid var(--line);border-radius:9px}
+.sws{display:flex;gap:10px;flex-wrap:wrap}
+.swb{display:flex;align-items:center;gap:10px;border:1px solid var(--line);border-radius:12px;padding:7px 12px 7px 7px;background:#fff;cursor:pointer;text-align:left}
+.swb i{width:30px;height:30px;border-radius:9px;flex:none;box-shadow:inset 0 0 0 1px rgba(0,0,0,.06)}
+.swb b{display:block;font-size:13.5px;font-weight:600}.swb small{display:block;color:var(--ink3);font-size:12px;font-family:ui-monospace,monospace}
+.swb[aria-pressed=true]{border-color:var(--pri);box-shadow:inset 0 0 0 1px var(--pri);background:var(--soft)}
+.swb:disabled{opacity:.4;cursor:default}
+.swb.ro{cursor:default}
 .cin span{font-size:13.5px;font-weight:600}.cin small{display:block;color:var(--ink3);font-size:12px;font-family:ui-monospace,monospace}
 .blk{margin-top:18px}.blk>label.f{margin-bottom:8px}
 .sw2{display:flex;align-items:center;gap:10px;padding:8px 0;font-size:14.5px;cursor:pointer}
@@ -113,14 +120,14 @@ input[type=checkbox]{accent-color:var(--pri);width:16px;height:16px}
 .dev{display:flex;gap:4px;background:#e8ecf7;padding:3px;border-radius:10px}
 .dev button{border:0;background:transparent;padding:5px 10px;border-radius:8px;font-size:12.5px;font-weight:600;color:var(--ink2);cursor:pointer}
 .dev button[aria-pressed=true]{background:#fff;color:var(--ink)}
-.phone{border-radius:34px;padding:10px;background:#0b1238;box-shadow:0 30px 60px -25px rgba(11,18,56,.6);transition:.3s}
-.phone iframe{width:100%;height:calc(100vh - 170px);min-height:520px;max-height:840px;border:0;border-radius:26px;display:block;background:#0b1238}
+.phone{border-radius:34px;padding:10px;background:#013D70;box-shadow:0 30px 60px -25px rgba(1,61,112,.55);transition:.3s}
+.phone iframe{width:100%;height:calc(100vh - 170px);min-height:520px;max-height:840px;border:0;border-radius:26px;display:block;background:#013D70}
 .wide .layout{grid-template-columns:minmax(0,1fr) minmax(0,1.15fr)}
 .wide .phone{border-radius:18px;padding:6px}.wide .phone iframe{border-radius:13px}
 
 .pop{position:absolute;z-index:20;background:#fff;border:1px solid var(--line);border-radius:14px;padding:10px;display:grid;grid-template-columns:repeat(5,40px);gap:6px;box-shadow:0 20px 40px -15px rgba(20,26,58,.35)}
 .pop button{width:40px;height:40px;border-radius:10px;border:1px solid var(--line);background:#fff;display:grid;place-items:center;cursor:pointer;color:var(--ink)}
-.pop button:hover,.pop button[aria-pressed=true]{background:#eef2ff;border-color:var(--pri);color:var(--pri)}
+.pop button:hover,.pop button[aria-pressed=true]{background:var(--soft);border-color:var(--pri);color:var(--pri)}
 .toast{position:fixed;bottom:22px;left:50%;transform:translate(-50%,20px);opacity:0;background:var(--ink);color:#fff;padding:11px 18px;border-radius:12px;font-weight:600;font-size:14px;transition:.25s;z-index:30;pointer-events:none;max-width:92vw;text-align:center}
 .toast.on{opacity:1;transform:translate(-50%,0)}.toast.bad{background:var(--bad)}
 .loading{min-height:100vh;display:grid;place-items:center;color:var(--ink3)}
@@ -237,7 +244,7 @@ function show(id){ ['loginF','setupF','srvSetupF'].forEach(function(x){ $('#'+x)
 function normalize(d){
   d = d || {}; d.profile = d.profile || {}; d.sections = d.sections || []; d.social = d.social || [];
   d.theme = window.MPBA_THEME(d.theme);
-  d.sections.forEach(function(s){ s.links = s.links || []; });
+  d.sections.forEach(function(s){ s.links = s.links || []; s.color = window.MPBA_SLOT(s.color); });
   return d;
 }
 var PREV_PATH = /^(uploads\/|assets\/previews\/)[a-z0-9_.-]+\.(jpe?g|png|webp)$/i;
@@ -245,8 +252,9 @@ var URL_OK = /^(https?:\/\/\S+\.\S+|mailto:\S+|tel:[+0-9 ()-]+)$/i;
 /* Limpieza antes de publicar (misma regla que aplica api.php en el servidor) */
 function clean(d){
   var o = clone(d), feat = false;
+  o.theme = window.MPBA_THEME(o.theme);
   o.sections = o.sections.filter(function(s){ return (s.title||'').trim(); }).map(function(s){
-    if (!SLOTS[s.color]) s.color = 'blue';
+    s.color = window.MPBA_SLOT(s.color);
     s.title = s.title.trim().slice(0,60);
     s.links = s.links.filter(function(l){ return (l.title||'').trim() && URL_OK.test((l.url||'').trim()); }).map(function(l){
       l.title = l.title.trim().slice(0,100); l.url = l.url.trim(); l.desc = (l.desc||'').trim().slice(0,160);
@@ -578,7 +586,7 @@ function vLinks(v){
     ])]);
     if (!s.links.length) box.appendChild(h('div', {class:'empty', text:'Esta sección todavía no tiene enlaces.'}));
     s.links.forEach(function(l, li){
-      var ib = h('button', {type:'button', class:'ipick', style:'background:'+(pal[s.color]||pal.blue), title:'Cambiar ícono', 'aria-label':'Cambiar ícono', html:IC(l.icon,22)});
+      var ib = h('button', {type:'button', class:'ipick', style:'background:'+(pal[s.color]||pal.blue)+';color:'+window.MPBA_ON(pal[s.color]||pal.blue), title:'Cambiar ícono', 'aria-label':'Cambiar ícono', html:IC(l.icon,22)});
       ib.addEventListener('click', function(e){ e.stopPropagation(); iconPicker(ib, l.icon, function(k){ l.icon=k; ib.innerHTML=IC(k,22); changed(); }); });
       var row;
       var visCb = h('input', {type:'checkbox', checked:l.visible!==false, on:{change:function(e){ l.visible=e.target.checked; row.classList.toggle('off', !l.visible); changed(); }}});
@@ -655,9 +663,9 @@ function vLook(v){
   var pr = h('div', {class:'presets'});
   Object.keys(PRESETS).forEach(function(k){
     var p = PRESETS[k].theme, dark = p.mode !== 'light';
-    pr.appendChild(h('button', {type:'button', class:'preset', on:{click:function(){ D.theme = clone(p); render(); changed(); toast('Estilo «' + PRESETS[k].label + '» aplicado'); }}}, [
+    pr.appendChild(h('button', {type:'button', class:'preset', on:{click:function(){ D.theme = window.MPBA_THEME(clone(p)); render(); changed(); toast('Estilo «' + PRESETS[k].label + '» aplicado'); }}}, [
       h('div', {class:'mini', style:'background:'+p.bg+';border:1px solid '+(dark?'transparent':'#e3e7f2')}, [
-        h('i', {style:'width:70%;background:'+p.accent}), h('i', {style:'width:45%;background:'+p.palette.green}),
+        h('i', {style:'width:70%;background:'+p.accent}), h('i', {style:'width:45%;background:'+window.MPBA_BRAND.green}),
         h('i', {style:'width:55%;background:'+(dark?'rgba(255,255,255,.25)':'rgba(18,26,69,.15)')})
       ]),
       h('span', {text:PRESETS[k].label})
@@ -665,16 +673,35 @@ function vLook(v){
   });
   v.appendChild(h('div', {class:'panel'}, [h('h3', {text:'Estilos predefinidos'}), h('p', {class:'muted', text:'Un punto de partida rápido. Después podés ajustar cada detalle abajo.'}), pr]));
 
-  var cols = h('div', {class:'colors'});
-  Object.keys(SLOTS).forEach(function(k){ cols.appendChild(color(SLOTS[k], function(){return T.palette[k]}, function(x){T.palette[k]=x})); });
+  var B = window.MPBA_BRAND, dark = T.mode !== 'light';
+  function lum(hex){ var n = parseInt(String(hex).slice(1), 16); return ((n >> 16) * .299 + ((n >> 8) & 255) * .587 + (n & 255) * .114) / 255; }
+  function swb(k, opts){
+    return h('button', {type:'button', class:'swb' + (opts.ro ? ' ro' : ''), 'aria-pressed': opts.ro ? null : String(T.accent === B[k]), disabled: !!opts.off,
+      title: opts.off ? 'No se distingue sobre fondo oscuro' : null, on: opts.ro ? {} : {click:function(){ T.accent = B[k]; render(); changed(); }}},
+      [h('i', {style:'background:' + B[k]}), h('div', {}, [h('b', {text:SLOTS[k]}), h('small', {text:B[k]})])]);
+  }
+  var acc = h('div', {class:'sws', role:'group', 'aria-label':'Color principal'});
+  Object.keys(B).forEach(function(k){ acc.appendChild(swb(k, {off: dark && k === 'blue'})); });
+  var pal = h('div', {class:'sws'});
+  Object.keys(B).forEach(function(k){ pal.appendChild(swb(k, {ro:true})); });
+  var modes = h('div', {class:'opts', role:'group'});
+  [['dark','🌙 Oscuro'],['light','☀️ Claro']].forEach(function(o){
+    modes.appendChild(h('button', {type:'button', class:'opt', 'aria-pressed':String(T.mode===o[0]), html:o[1], on:{click:function(){
+      if (T.mode === o[0]) return;
+      T.mode = o[0];
+      /* Fondo acorde al modo: si quedó un fondo claro en modo oscuro (o al revés), se usa el institucional */
+      if (o[0] === 'dark' && lum(T.bg) > .5) T.bg = B.blue;
+      if (o[0] === 'light' && lum(T.bg) < .5) T.bg = '#eaf6fd';
+      D.theme = window.MPBA_THEME(T); render(); changed();
+    }}}));
+  });
   v.appendChild(h('div', {class:'panel'}, [
-    h('h3', {text:'Colores'}), h('p', {class:'muted', text:'El modo define si el texto va claro sobre fondo oscuro o al revés. Elegí un fondo acorde.'}),
-    h('div', {class:'blk'}, [h('label', {class:'f', text:'Modo'}), opts('mode', [['dark','🌙 Oscuro'],['light','☀️ Claro']])]),
-    h('div', {class:'blk grid2'}, [
-      color('Fondo', function(){return T.bg}, function(x){T.bg=x}),
-      color('Color principal (destacado)', function(){return T.accent}, function(x){T.accent=x})
-    ]),
-    h('div', {class:'blk'}, [h('label', {class:'f', text:'Colores de las secciones'}), cols])
+    h('h3', {text:'Colores'}), h('p', {class:'muted', text:'La página usa solo la paleta institucional. Podés elegir el modo, el fondo y cuál de los cuatro colores es el principal.'}),
+    h('div', {class:'blk'}, [h('label', {class:'f', text:'Modo'}), modes]),
+    h('div', {class:'blk'}, [h('label', {class:'f', text:'Fondo'}), h('div', {style:'max-width:260px'}, [color('Fondo de la página', function(){return T.bg}, function(x){T.bg=x})])]),
+    h('div', {class:'blk'}, [h('label', {class:'f', text:'Color principal (destacado principal y detalles)'}), acc]),
+    h('div', {class:'blk'}, [h('label', {class:'f', text:'Paleta institucional'}), pal,
+      h('p', {class:'muted', style:'margin-top:8px', text:'Cada sección toma uno de estos colores; se elige en la pestaña Enlaces.'})])
   ]));
 
   var fl = Object.keys(FONTS).map(function(k){ return [k, '<span class="aa" style="font-family:\''+FONTS[k].h+'\',system-ui">Aa</span>'+FONTS[k].label]; });
