@@ -9,7 +9,7 @@ window.MPBA_DATA = {
   "theme": {
     "mode": "light",
     "bg": "#eaf6fd",
-    "accent": "#313d62",
+    "accent": "#013D70",
     "font": "sistema",
     "layout": "list",
     "cards": "solid",
@@ -19,12 +19,12 @@ window.MPBA_DATA = {
     "motion": true,
     "preview": true,
     "palette": {
-      "blue": "#1386c4",
-      "green": "#1d9a6c",
-      "red": "#cf3f3f",
-      "sky": "#2aa6dd",
-      "gold": "#b88310",
-      "violet": "#5b63d6"
+      "blue": "#013D70",
+      "green": "#5FAC5E",
+      "sky": "#78C2FF",
+      "red": "#EC184F",
+      "gold": "#78C2FF",
+      "violet": "#013D70"
     }
   },
   "sections": [
@@ -65,7 +65,7 @@ window.MPBA_DATA = {
         {
           "id": "l3",
           "title": "Mapa interactivo de acompañamiento a la víctima",
-          "desc": "Centros de asistencia y acompañamiento cerca tuyo",
+          "desc": "Centro de asistencia y acompañamiento cerca tuyo",
           "url": "https://www.mpba.gov.ar/miav",
           "icon": "users",
           "visible": true,
@@ -107,12 +107,12 @@ window.MPBA_DATA = {
     {
       "id": "sasj5tza",
       "title": "Comunicación Digital",
-      "color": "gold",
+      "color": "sky",
       "links": [
         {
           "id": "lqioeusk",
           "title": "Anatomía de una investigación",
-          "desc": "Serie audiovisual en la que fiscales del MPBA reconstruyen cómo investigaron casos emblemáticos",
+          "desc": "Serie audiovisual en la que fiscales del MPBA reconstruyen la investigación de casos emblemáticos",
           "url": "https://www.youtube.com/playlist?list=PLBtWGwJ4GJLU",
           "icon": "link",
           "visible": true,
