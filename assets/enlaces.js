@@ -28,7 +28,9 @@ window.MPBA_DATA = {
       "gold": "#78C2FF",
       "violet": "#013D70"
     },
-    "colors": []
+    "colors": [
+      "#C4302B"
+    ]
   },
   "sections": [
     {
@@ -69,7 +71,7 @@ window.MPBA_DATA = {
           "visible": true,
           "featured": false,
           "highlight": false,
-          "preview": "none"
+          "preview": "assets/previews/ldenuncia-1794497266058.jpg"
         },
         {
           "id": "ldefensa",
@@ -81,7 +83,7 @@ window.MPBA_DATA = {
           "visible": true,
           "featured": false,
           "highlight": false,
-          "preview": "none"
+          "preview": "assets/previews/ldefensa-1794497267754.jpg"
         },
         {
           "id": "ltutelar",
@@ -93,7 +95,7 @@ window.MPBA_DATA = {
           "visible": true,
           "featured": false,
           "highlight": false,
-          "preview": "none"
+          "preview": "assets/previews/ltutelar-1794497269770.jpg"
         },
         {
           "id": "lgenero",
@@ -105,7 +107,7 @@ window.MPBA_DATA = {
           "visible": true,
           "featured": false,
           "highlight": false,
-          "preview": "none"
+          "preview": "assets/previews/lgenero-1794497271500.jpg"
         },
         {
           "id": "l2",
@@ -152,7 +154,7 @@ window.MPBA_DATA = {
         },
         {
           "id": "l5",
-          "title": "Canal de YouTube",
+          "title": "Canal de Capacitación",
           "desc": "Clases, conferencias y actividades grabadas",
           "url": "https://www.youtube.com/channel/UCnRlF42jwiUEX2MOHYdXltg",
           "icon": "youtube",
