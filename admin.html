@@ -132,6 +132,24 @@ input[type=checkbox]{accent-color:var(--pri);width:16px;height:16px}
 .pop .pl:first-child{margin-top:0}
 .pop button.up{grid-column:1/-1;width:auto;height:36px;display:flex;justify-content:center;gap:6px;font-size:13px;font-weight:600;color:var(--pri)}
 .pop .ph{grid-column:1/-1;font-size:12px;color:var(--ink3);margin-top:-2px}
+.cbtn{display:inline-flex;align-items:center;gap:8px;border:1px solid var(--line);background:#fff;border-radius:10px;padding:5px 10px 5px 6px;font-size:13px;font-weight:600;color:var(--ink2);cursor:pointer}
+.cbtn i{width:20px;height:20px;border-radius:6px;box-shadow:inset 0 0 0 1px rgba(0,0,0,.08)}
+.cbtn i.inh{background:repeating-linear-gradient(45deg,#e9eef3 0 4px,#fff 4px 8px)!important}
+.cbtn:hover{border-color:#c4d2df}
+.secopt{display:flex;gap:16px;flex-wrap:wrap;margin:-4px 0 14px 8px;font-size:13.5px;color:var(--ink2)}
+.secopt label{display:flex;align-items:center;gap:6px;cursor:pointer}
+.cpop{grid-template-columns:repeat(6,34px)!important;width:auto}
+.cpop button.cs{width:34px!important;height:34px!important;border-radius:9px!important;border:0!important;box-shadow:inset 0 0 0 1px rgba(0,0,0,.1)}
+.cpop button.cs[aria-pressed=true]{box-shadow:0 0 0 2px #fff,0 0 0 4px var(--pri)}
+.cpop button.inh{grid-column:1/-1;width:auto!important;height:32px!important;font-size:12.5px;font-weight:600;color:var(--ink2);display:flex;gap:8px;justify-content:flex-start;padding:0 10px}
+.cpop button.inh i{width:16px;height:16px;border-radius:4px;background:var(--sc)}
+.cpop .add{grid-column:1/-1;display:flex;gap:6px;align-items:center}
+.cpop .add input{width:100%;height:32px;padding:4px 8px;font-family:ui-monospace,monospace;font-size:13px}
+.cpop .add i{width:32px;height:32px;border-radius:8px;flex:none;box-shadow:inset 0 0 0 1px rgba(0,0,0,.1);background:#fff}
+.cpop .add button{width:auto!important;height:32px!important;padding:0 10px;font-size:12.5px;font-weight:600;color:var(--pri)}
+.cpop .cur{grid-column:1/-1;font-size:12px;color:var(--ink3)}
+.swb .x{margin-left:4px;border:0;background:none;color:var(--ink3);cursor:pointer;font-size:15px;line-height:1;padding:2px 4px;border-radius:6px}
+.swb .x:hover{color:var(--bad);background:#fff0f3}
 .ipick.w{background:#fff!important;box-shadow:inset 0 0 0 1px var(--line)}
 .toast{position:fixed;bottom:22px;left:50%;transform:translate(-50%,20px);opacity:0;background:var(--ink);color:#fff;padding:11px 18px;border-radius:12px;font-weight:600;font-size:14px;transition:.25s;z-index:30;pointer-events:none;max-width:92vw;text-align:center}
 .toast.on{opacity:1;transform:translate(-50%,0)}.toast.bad{background:var(--bad)}
@@ -219,7 +237,7 @@ input[type=checkbox]{accent-color:var(--pri);width:16px;height:16px}
 </div>
 <div class="toast" id="toast" role="status"></div>
 
-<script src="assets/core.js?v=20261112a"></script><!-- al cambiar core.js, subir este número para que nadie quede con la versión vieja -->
+<script src="assets/core.js?v=20261112b"></script><!-- al cambiar core.js, subir este número para que nadie quede con la versión vieja -->
 <script>
 (function(){
 var IC = window.MPBA_ICON, ICONS = window.MPBA_ICONS, SLOTS = window.MPBA_SLOTS, FONTS = window.MPBA_FONTS, PRESETS = window.MPBA_PRESETS;
@@ -249,7 +267,11 @@ function show(id){ ['loginF','setupF','srvSetupF'].forEach(function(x){ $('#'+x)
 function normalize(d){
   d = d || {}; d.profile = d.profile || {}; d.sections = d.sections || []; d.social = d.social || [];
   d.theme = window.MPBA_THEME(d.theme);
-  d.sections.forEach(function(s){ s.links = s.links || []; s.color = window.MPBA_SLOT(s.color); });
+  d.sections.forEach(function(s){
+    s.links = s.links || []; s.color = window.MPBA_COLOR(s.color);
+    s.level = s.level === 'secondary' ? 'secondary' : 'primary'; s.showTitle = s.showTitle !== false;
+    s.links.forEach(function(l){ l.color = window.MPBA_HEX.test(l.color || '') ? l.color.toUpperCase() : ''; });
+  });
   return d;
 }
 var ICON_PATH = /^img:(uploads\/|assets\/icons\/)[a-z0-9_.-]+\.(png|jpe?g|webp)$/i;
@@ -260,13 +282,14 @@ function clean(d){
   var o = clone(d), feat = false;
   o.theme = window.MPBA_THEME(o.theme);
   o.sections = o.sections.filter(function(s){ return (s.title||'').trim(); }).map(function(s){
-    s.color = window.MPBA_SLOT(s.color);
+    s.color = window.MPBA_COLOR(s.color); s.level = s.level === 'secondary' ? 'secondary' : 'primary'; s.showTitle = s.showTitle !== false;
     s.title = s.title.trim().slice(0,60);
     s.links = s.links.filter(function(l){ return (l.title||'').trim() && URL_OK.test((l.url||'').trim()); }).map(function(l){
       l.title = l.title.trim().slice(0,100); l.url = l.url.trim(); l.desc = (l.desc||'').trim().slice(0,160);
       if (!ICONS[l.icon] && !ICON_PATH.test(l.icon || '')) l.icon = 'link';
       l.visible = l.visible !== false; l.featured = !!l.featured && !feat; if (l.featured) feat = true;
       l.highlight = !!l.highlight && !l.featured;
+      l.color = window.MPBA_HEX.test(l.color || '') ? l.color.toUpperCase() : '';
       l.preview = l.preview === 'none' ? 'none' : (PREV_PATH.test(l.preview || '') ? l.preview : '');
       return l;
     });
@@ -574,6 +597,54 @@ var DN='<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="curr
 var TR='<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3"/></svg>';
 
 /* selector de íconos */
+/* Selector de color: paleta oficial, complementarios, colores propios y código #RRGGBB */
+function colorName(hex){
+  var p = window.MPBA_PALETTE.filter(function(c){ return c.hex === hex; })[0];
+  return p ? p.label : hex;
+}
+function colorPicker(btn, current, onPick, inherit){
+  closePop();
+  var p = h('div', {class:'pop cpop', role:'dialog', 'aria-label':'Elegir color'});
+  function sw(hex, label){
+    p.appendChild(h('button', {type:'button', class:'cs', title:label + ' · ' + hex, 'aria-label':label + ' ' + hex, 'aria-pressed':String(hex === current), style:'background:' + hex,
+      on:{click:function(){ onPick(hex); closePop(); btn.focus(); }}}));
+  }
+  if (inherit) {
+    p.appendChild(h('button', {type:'button', class:'inh', style:'--sc:' + inherit, 'aria-pressed':String(!current), on:{click:function(){ onPick(''); closePop(); btn.focus(); }}},
+      [h('i'), 'Igual que la sección']));
+  }
+  ['Oficiales', 'Complementarios'].forEach(function(g){
+    p.appendChild(h('div', {class:'pl', text:g}));
+    window.MPBA_PALETTE.forEach(function(c){ if (c.group === g) sw(c.hex, c.label); });
+  });
+  p.appendChild(h('div', {class:'pl', text:'Propios'}));
+  D.theme.colors.forEach(function(hex){ sw(hex, 'Color propio'); });
+  var prev = h('i'), inp = h('input', {type:'text', placeholder:'#RRGGBB', maxlength:'7', 'aria-label':'Código de color', on:{
+    input:function(){ var v = norm(inp.value); prev.style.background = v || '#fff'; },
+    keydown:function(e){ if (e.key === 'Enter') { e.preventDefault(); add(); } }}});
+  function norm(v){ v = String(v).trim(); if (v && v[0] !== '#') v = '#' + v; return window.MPBA_HEX.test(v) ? v.toUpperCase() : ''; }
+  function add(){
+    var v = norm(inp.value);
+    if (!v) { toast('Escribí un código de 6 dígitos, por ejemplo #5C5C5C', true); inp.focus(); return; }
+    if (D.theme.colors.indexOf(v) < 0 && !window.MPBA_PALETTE.some(function(c){ return c.hex === v; })) D.theme.colors.push(v);
+    onPick(v); closePop(); btn.focus();
+  }
+  p.appendChild(h('div', {class:'add'}, [prev, inp, h('button', {type:'button', text:'Agregar', on:{click:add}})]));
+  p.appendChild(h('div', {class:'cur', text: current ? 'Actual: ' + colorName(current) + (colorName(current) === current ? '' : ' · ' + current) : 'Actual: igual que la sección'}));
+  document.body.appendChild(p);
+  var r = btn.getBoundingClientRect();
+  p.style.top = (r.bottom + window.scrollY + 6) + 'px';
+  p.style.left = Math.max(8, Math.min(r.left + window.scrollX, window.innerWidth - p.offsetWidth - 12)) + 'px';
+  setTimeout(function(){ document.addEventListener('click', outside); }, 0);
+  function outside(e){ if (!p.contains(e.target)) closePop(); }
+  closePop.fn = outside; closePop.el = p;
+  (p.querySelector('[aria-pressed=true]') || p.querySelector('button')).focus();
+}
+function cbtn(hex, label, onClick, inheritColor){
+  return h('button', {type:'button', class:'cbtn', title:'Cambiar color', on:{click:function(e){ e.stopPropagation(); onClick(this); }}},
+    [h('i', {class: hex ? null : 'inh', style: hex ? 'background:' + hex : null}), label]);
+}
+
 function iconPicker(btn, current, onPick){
   closePop();
   var p = h('div', {class:'pop', role:'dialog', 'aria-label':'Elegir ícono'});
@@ -614,10 +685,7 @@ document.addEventListener('keydown', function(e){ if (e.key === 'Escape') closeP
 function vLinks(v){
   var pal = D.theme.palette;
   D.sections.forEach(function(s, si){
-    var sw = h('div', {class:'sw', role:'group', 'aria-label':'Color de la sección'});
-    Object.keys(SLOTS).forEach(function(k){
-      sw.appendChild(h('button', {type:'button', title:SLOTS[k], 'aria-label':SLOTS[k], 'aria-pressed':String(s.color===k), style:'background:'+pal[k], on:{click:function(){s.color=k; render(); changed();}}}));
-    });
+    var sw = cbtn(s.color, colorName(s.color), function(b){ colorPicker(b, s.color, function(hex){ s.color = hex || s.color; render(); changed(); }); });
     var box = h('div', {class:'panel'}, [h('div', {class:'sh'}, [
       h('input', {type:'text', value:s.title, 'aria-label':'Nombre de la sección', placeholder:'Nombre de la sección', on:{input:function(e){s.title=e.target.value; changed();}}}),
       sw,
@@ -626,10 +694,14 @@ function vLinks(v){
       h('button', {class:'btn sm ghost danger', title:'Eliminar sección', 'aria-label':'Eliminar sección', html:TR, on:{click:function(){
         if (confirm('¿Eliminar la sección "'+(s.title||'sin nombre')+'" y sus '+s.links.length+' enlaces?')) { D.sections.splice(si,1); render(); changed(); }
       }}})
+    ]), h('div', {class:'secopt'}, [
+      h('label', {title:'Si se desmarca, los enlaces se muestran sin el título de la sección arriba.'}, [h('input', {type:'checkbox', checked:s.showTitle !== false, on:{change:function(e){ s.showTitle = e.target.checked; changed(); }}}), 'Mostrar el título en la página']),
+      h('label', {title:'Se muestra más abajo, más compacta y bajo «Más recursos».'}, [h('input', {type:'checkbox', checked:s.level === 'secondary', on:{change:function(e){ s.level = e.target.checked ? 'secondary' : 'primary'; changed(); }}}), 'Sección secundaria (menor jerarquía)'])
     ])]);
     if (!s.links.length) box.appendChild(h('div', {class:'empty', text:'Esta sección todavía no tiene enlaces.'}));
     s.links.forEach(function(l, li){
-      var ib = h('button', {type:'button', class:'ipick' + (window.MPBA_ICON_IMG(l.icon) ? ' w' : ''), style:'background:'+(pal[s.color]||pal.blue)+';color:'+window.MPBA_ON(pal[s.color]||pal.blue), title:'Cambiar ícono', 'aria-label':'Cambiar ícono', html:IC(l.icon,22)});
+      var lc = l.color || s.color;
+      var ib = h('button', {type:'button', class:'ipick' + (window.MPBA_ICON_IMG(l.icon) ? ' w' : ''), style:'background:'+lc+';color:'+window.MPBA_ON(lc), title:'Cambiar ícono', 'aria-label':'Cambiar ícono', html:IC(l.icon,22)});
       ib.addEventListener('click', function(e){ e.stopPropagation(); iconPicker(ib, l.icon, function(k){ l.icon=k; render(); changed(); }); });
       var row;
       var visCb = h('input', {type:'checkbox', checked:l.visible!==false, on:{change:function(e){ l.visible=e.target.checked; row.classList.toggle('off', !l.visible); changed(); }}});
@@ -665,6 +737,7 @@ function vLinks(v){
             h('div', {class:'w'}, [h('label', {class:'f', text:'Descripción breve (opcional)'}), inp(l,'desc','Una línea que explique a dónde lleva','text','Descripción')])
           ]),
           h('div', {class:'tg'}, [
+            cbtn(l.color, l.color ? colorName(l.color) : 'Color de la sección', function(b){ colorPicker(b, l.color, function(hex){ l.color = hex; render(); changed(); }, s.color); }),
             h('label', {}, [visCb, 'Visible']),
             h('label', {title:'Se resalta y ocupa todo el ancho, en su lugar dentro de esta sección. Puede haber varios.', class: l.featured ? 'dis' : null}, [hlCb, 'Destacar en la sección']),
             h('label', {title:'Se muestra grande arriba de todo, antes de las secciones. Solo puede haber uno.'}, [featCb, 'Destacado principal'])
@@ -680,13 +753,13 @@ function vLinks(v){
       box.appendChild(row);
     });
     box.appendChild(h('button', {class:'btn sm', text:'+ Agregar enlace', on:{click:function(){
-      s.links.push({id:uid('l'), title:'', desc:'', url:'https://', icon:'link', visible:true, featured:false, highlight:false}); render(); changed();
+      s.links.push({id:uid('l'), title:'', desc:'', url:'https://', icon:'link', color:'', visible:true, featured:false, highlight:false}); render(); changed();
       var rows = $('#view').querySelectorAll('.panel')[si].querySelectorAll('.link'); var last = rows[rows.length-1]; if (last) last.querySelector('input').focus();
     }}}));
     v.appendChild(box);
   });
   v.appendChild(h('button', {class:'btn', text:'+ Agregar sección', on:{click:function(){
-    D.sections.push({id:uid('s'), title:'Nueva sección', color:'sky', links:[]}); render(); changed();
+    D.sections.push({id:uid('s'), title:'Nueva sección', color:'#78C2FF', level:'primary', showTitle:true, links:[]}); render(); changed();
   }}}));
 }
 
@@ -725,8 +798,34 @@ function vLook(v){
   }
   var acc = h('div', {class:'sws', role:'group', 'aria-label':'Color principal'});
   Object.keys(B).forEach(function(k){ acc.appendChild(swb(k, {off: dark && k === 'blue'})); });
-  var pal = h('div', {class:'sws'});
-  Object.keys(B).forEach(function(k){ pal.appendChild(swb(k, {ro:true})); });
+  function chip(hex, label, del){
+    return h('div', {class:'swb ro'}, [h('i', {style:'background:' + hex}), h('div', {}, [h('b', {text:label}), h('small', {text:hex})]),
+      del ? h('button', {type:'button', class:'x', title:'Quitar este color', 'aria-label':'Quitar ' + hex, text:'×', on:{click:del}}) : null]);
+  }
+  function group(g){ var w = h('div', {class:'sws'}); window.MPBA_PALETTE.forEach(function(c){ if (c.group === g) w.appendChild(chip(c.hex, c.label)); }); return w; }
+  var own = h('div', {class:'sws'});
+  T.colors.forEach(function(hex, i){ own.appendChild(chip(hex, 'Propio', function(){
+    var used = D.sections.some(function(s){ return s.color === hex || s.links.some(function(l){ return l.color === hex; }); });
+    if (used && !confirm('Ese color se está usando. Si lo quitás de la lista, las secciones o enlaces que lo usan lo conservan. ¿Quitarlo?')) return;
+    T.colors.splice(i, 1); render(); changed();
+  })); });
+  var addIn = h('input', {type:'text', placeholder:'#RRGGBB', maxlength:'7', style:'width:130px;font-family:ui-monospace,monospace', 'aria-label':'Código de color'});
+  var addPrev = h('i', {style:'width:34px;height:34px;border-radius:9px;display:inline-block;box-shadow:inset 0 0 0 1px rgba(0,0,0,.1);background:#fff;flex:none'});
+  addIn.addEventListener('input', function(){ var v = addIn.value.trim(); if (v && v[0] !== '#') v = '#' + v; addPrev.style.background = window.MPBA_HEX.test(v) ? v : '#fff'; });
+  function addOwn(){
+    var v = addIn.value.trim(); if (v && v[0] !== '#') v = '#' + v;
+    if (!window.MPBA_HEX.test(v)) { toast('Escribí un código de 6 dígitos, por ejemplo #5C5C5C', true); return; }
+    v = v.toUpperCase();
+    if (T.colors.indexOf(v) < 0 && !window.MPBA_PALETTE.some(function(c){ return c.hex === v; })) T.colors.push(v);
+    render(); changed(); toast('Color agregado. Ya se puede elegir en secciones y enlaces.');
+  }
+  addIn.addEventListener('keydown', function(e){ if (e.key === 'Enter') { e.preventDefault(); addOwn(); } });
+  var pal = h('div', {}, [
+    h('label', {class:'f', text:'Oficiales'}), group('Oficiales'),
+    h('label', {class:'f', style:'margin-top:14px', text:'Complementarios'}), group('Complementarios'),
+    h('label', {class:'f', style:'margin-top:14px', text:'Propios'}), T.colors.length ? own : h('p', {class:'muted', text:'Todavía no agregaste colores propios.'}),
+    h('div', {style:'display:flex;gap:8px;align-items:center;margin-top:10px'}, [addPrev, addIn, h('button', {type:'button', class:'btn sm', text:'Agregar color', on:{click:addOwn}})])
+  ]);
   var modes = h('div', {class:'opts', role:'group'});
   [['dark','🌙 Oscuro'],['light','☀️ Claro']].forEach(function(o){
     modes.appendChild(h('button', {type:'button', class:'opt', 'aria-pressed':String(T.mode===o[0]), html:o[1], on:{click:function(){
@@ -739,12 +838,12 @@ function vLook(v){
     }}}));
   });
   v.appendChild(h('div', {class:'panel'}, [
-    h('h3', {text:'Colores'}), h('p', {class:'muted', text:'La página usa solo la paleta institucional. Podés elegir el modo, el fondo y cuál de los cuatro colores es el principal.'}),
+    h('h3', {text:'Colores'}), h('p', {class:'muted', text:'Elegí el modo, el fondo y cuál de los colores oficiales es el principal. Abajo está la paleta disponible para secciones y enlaces.'}),
     h('div', {class:'blk'}, [h('label', {class:'f', text:'Modo'}), modes]),
     h('div', {class:'blk'}, [h('label', {class:'f', text:'Fondo'}), h('div', {style:'max-width:260px'}, [color('Fondo de la página', function(){return T.bg}, function(x){T.bg=x})])]),
     h('div', {class:'blk'}, [h('label', {class:'f', text:'Color principal (destacado principal y detalles)'}), acc]),
-    h('div', {class:'blk'}, [h('label', {class:'f', text:'Paleta institucional'}), pal,
-      h('p', {class:'muted', style:'margin-top:8px', text:'Cada sección toma uno de estos colores; se elige en la pestaña Enlaces.'})])
+    h('div', {class:'blk'}, [h('h3', {text:'Paleta', style:'font-size:14.5px;margin:6px 0 10px'}), pal,
+      h('p', {class:'muted', style:'margin-top:10px', text:'Cada sección y cada enlace toma uno de estos colores; se elige en la pestaña Enlaces.'})])
   ]));
 
   var fl = Object.keys(FONTS).map(function(k){ return [k, '<span class="aa" style="font-family:\''+FONTS[k].h+'\',system-ui">Aa</span>'+FONTS[k].label]; });
@@ -795,7 +894,10 @@ function vProfile(v){
       h('div', {}, [h('label', {class:'f', text:'Título'}), inp(P,'title','Ministerio Público')]),
       h('div', {}, [h('label', {class:'f', text:'Etiqueta superior'}), inp(P,'kicker','Provincia de Buenos Aires')]),
       h('div', {class:'w'}, [h('label', {class:'f', text:'Subtítulo'}), inp(P,'subtitle','Procuración General…')]),
-      h('div', {}, [h('label', {class:'f', text:'Usuario en redes'}), inp(P,'handle','@mpbaoficial')])
+      h('div', {}, [h('label', {class:'f', text:'Usuario en redes'}), inp(P,'handle','@mpbaoficial')]),
+      h('div', {class:'w'}, [h('h3', {text:'Pie de página', style:'font-size:14.5px;margin:10px 0 0'})]),
+      h('div', {}, [h('label', {class:'f', text:'Nombre (también va en el ©)'}), inp(P,'footer','Ministerio Público de la Provincia de Buenos Aires')]),
+      h('div', {}, [h('label', {class:'f', text:'Segunda línea'}), inp(P,'footer2','Procuración General de la Suprema Corte de Justicia')])
     ])
   ]));
 }
