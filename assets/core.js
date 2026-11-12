@@ -47,7 +47,35 @@ window.MPBA_SLOTS = { blue: "Azul oscuro", green: "Verde", sky: "Celeste", red: 
 window.MPBA_SLOT_MAP = { gold: "sky", violet: "blue" };
 window.MPBA_SLOT = function (k) { k = window.MPBA_SLOT_MAP[k] || k; return window.MPBA_BRAND[k] ? k : "blue"; };
 /* Color del texto o ícono que va encima de cada color (el celeste es claro: lleva azul oscuro) */
-window.MPBA_ON = function (hex) { return String(hex).toUpperCase() === window.MPBA_BRAND.sky ? window.MPBA_BRAND.blue : "#FFFFFF"; };
+/* Paleta completa que ofrece el panel: oficiales + complementarios (los colores se guardan como código #RRGGBB) */
+window.MPBA_PALETTE = [
+  { group: "Oficiales", hex: "#013D70", label: "Azul oscuro · Ministerio" },
+  { group: "Oficiales", hex: "#5FAC5E", label: "Verde · Fiscal" },
+  { group: "Oficiales", hex: "#EC184F", label: "Rojo · Defensa" },
+  { group: "Oficiales", hex: "#78C2FF", label: "Celeste · Tutelar" },
+  { group: "Complementarios", hex: "#741FE9", label: "Violeta · Género" },
+  { group: "Complementarios", hex: "#070B43", label: "Azul" },
+  { group: "Complementarios", hex: "#B2C8DA", label: "Celeste grisáceo" },
+  { group: "Complementarios", hex: "#61D08D", label: "Verde" },
+  { group: "Complementarios", hex: "#BBCE6B", label: "Verde claro" },
+  { group: "Complementarios", hex: "#5C5C5C", label: "Gris oscuro" },
+  { group: "Complementarios", hex: "#F3F0F1", label: "Gris claro" }
+];
+window.MPBA_HEX = /^#[0-9A-F]{6}$/i;
+/* Color de una sección o enlace: código #RRGGBB, o nombre de versiones anteriores (blue, green...) */
+window.MPBA_COLOR = function (v, fallback) {
+  if (window.MPBA_HEX.test(v || "")) return String(v).toUpperCase();
+  if (v && (window.MPBA_BRAND[v] || window.MPBA_SLOT_MAP[v])) return window.MPBA_BRAND[window.MPBA_SLOT(v)];
+  return fallback || window.MPBA_BRAND.blue;
+};
+/* Texto o ícono que va encima de un color: azul oscuro sobre colores claros, blanco sobre el resto */
+window.MPBA_ON = function (hex) {
+  var n = parseInt(String(hex).replace("#", ""), 16);
+  if (isNaN(n)) return "#FFFFFF";
+  var lin = function (c) { c /= 255; return c <= .03928 ? c / 12.92 : Math.pow((c + .055) / 1.055, 2.4); };
+  var L = .2126 * lin(n >> 16) + .7152 * lin((n >> 8) & 255) + .0722 * lin(n & 255);
+  return L > .4 ? window.MPBA_BRAND.blue : "#FFFFFF";
+};
 
 /* Tipografías disponibles: [títulos, texto]. */
 window.MPBA_FONTS = {
@@ -83,5 +111,8 @@ window.MPBA_THEME = function (t) {
   o.palette = {};
   for (k in B) o.palette[k] = B[k];
   for (k in window.MPBA_SLOT_MAP) o.palette[k] = B[window.MPBA_SLOT_MAP[k]];
+  /* Colores propios agregados desde el panel */
+  o.colors = (Array.isArray(t.colors) ? t.colors : []).filter(function (c) { return window.MPBA_HEX.test(c); })
+    .map(function (c) { return c.toUpperCase(); }).filter(function (c, i, a) { return a.indexOf(c) === i; }).slice(0, 16);
   return o;
 };
