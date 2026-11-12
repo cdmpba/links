@@ -40,6 +40,7 @@ window.MPBA_FONTS = {
   moderna:    { label: "Moderna",     h: "Sora",              b: "Figtree" },
   clasica:    { label: "Clásica",     h: "Source Serif 4",    b: "Figtree" },
   geometrica: { label: "Geométrica",  h: "Plus Jakarta Sans", b: "Plus Jakarta Sans" },
+  google:     { label: "Google Sans", h: "Google Sans",       b: "Google Sans" },
   sistema:    { label: "Del sistema", h: "system-ui",         b: "system-ui" }
 };
 
