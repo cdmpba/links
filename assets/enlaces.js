@@ -85,7 +85,7 @@ window.MPBA_DATA = {
           "title": "Centro de Capacitación",
           "desc": "Cursos, jornadas y formación para agentes del MPBA",
           "url": "https://cec.mpba.gov.ar/",
-          "icon": "school",
+          "icon": "cec",
           "visible": true,
           "featured": false,
           "highlight": false,
