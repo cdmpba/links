@@ -118,6 +118,10 @@ h1 span{background:linear-gradient(100deg,var(--ink) 25%,color-mix(in srgb,var(-
 .card.hl .ar{width:38px;height:38px;border-radius:50%;display:grid;place-items:center;background:var(--c);color:var(--on);margin-top:0}
 .card.hl:hover .ar{color:var(--on);transform:rotate(-45deg)}
 
+/* Ícono que es imagen: fondo blanco en vez del color de la sección */
+.ic.w,.pvt .pb i.w,.pvt .pf .big.w{background:#fff!important;box-shadow:0 0 0 1px rgba(1,61,112,.10),0 8px 18px -10px rgba(1,61,112,.35)!important}
+.pvt .pb i.w{box-shadow:0 0 0 1px rgba(1,61,112,.12)!important}
+
 /* Vista previa del destino al pasar el mouse */
 .pvw{position:fixed;left:0;top:0;z-index:30;pointer-events:none;will-change:transform}
 .pvt{width:340px;border-radius:18px;overflow:hidden;background:var(--tile);border:1px solid var(--line);
@@ -239,7 +243,7 @@ footer{margin-top:56px;padding-top:28px;border-top:1px solid var(--line);display
   <div class="ps"><div class="sk"></div><img id="pvimg" alt="" referrerpolicy="no-referrer"><div class="pf"><span class="big" id="pvbig"></span><span id="pvft"></span></div><span class="wt">Generando vista previa…</span></div>
 </div></div>
 
-<script src="assets/core.js?v=20261110c"></script><!-- al cambiar core.js, subir este número para que nadie quede con la versión vieja -->
+<script src="assets/core.js?v=20261112a"></script><!-- al cambiar core.js, subir este número para que nadie quede con la versión vieja -->
 <script src="assets/enlaces.js"></script>
 <script>
 (function(){
@@ -248,6 +252,8 @@ footer{margin-top:56px;padding-top:28px;border-top:1px solid var(--line);display
   var ARROW = '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg>';
   function $(id){return document.getElementById(id)}
   function el(t,c,txt){var e=document.createElement(t);if(c)e.className=c;if(txt!=null)e.textContent=txt;return e}
+  /* Íconos que son imagen (logo a color o imagen propia): van sobre fondo blanco */
+  function icw(name){ return window.MPBA_ICON_IMG(name) ? ' w' : ''; }
   function host(u){try{return new URL(u).hostname.replace(/^www\./,'')}catch(e){return ''}}
   function safe(u){return /^(https?:|mailto:|tel:)/i.test(u||'')?u:'#'}
   function safeImg(u){return /^(https:\/\/|uploads\/|assets\/|data:image\/(png|jpeg|webp);base64,)/i.test(u||'')?u:''}
@@ -310,7 +316,7 @@ footer{margin-top:56px;padding-top:28px;border-top:1px solid var(--line);display
         if (l.featured && !featDone) {
           featDone = true;
           var a = el('a','feat rv'); a.href = safe(l.url); a.target = '_blank'; a.rel = 'noopener'; a.style.setProperty('--i', n++);
-          a.innerHTML = '<span class="ic">' + IC(l.icon,28) + '</span>';
+          a.innerHTML = '<span class="ic' + icw(l.icon) + '">' + IC(l.icon,28) + '</span>';
           var tx = el('div'); tx.appendChild(el('div','lbl','Destacado')); tx.appendChild(el('div','t',l.title)); if (l.desc) tx.appendChild(el('div','d',l.desc));
           a.appendChild(tx); var go = el('span','go'); go.innerHTML = ARROW; a.appendChild(go);
           hover(a, l, T.accent, true);   /* en el celular muestra la captura, como los destacados */
@@ -324,7 +330,7 @@ footer{margin-top:56px;padding-top:28px;border-top:1px solid var(--line);display
       var g = el('div','grid');
       rest.forEach(function(l){
         var a = el('a','card rv' + (l.highlight ? ' hl' : '')); a.href = safe(l.url); a.target = '_blank'; a.rel = 'noopener'; a.style.setProperty('--i', n++);
-        a.innerHTML = '<span class="ic">' + IC(l.icon, l.highlight ? 27 : 24) + '</span>';
+        a.innerHTML = '<span class="ic' + icw(l.icon) + '">' + IC(l.icon, l.highlight ? 27 : 24) + '</span>';
         var tx = el('div','tx'); if (l.highlight) tx.appendChild(el('span','pill','Destacado')); tx.appendChild(el('div','t',l.title)); if (l.desc) tx.appendChild(el('div','d',l.desc));
         var hu = host(l.url); if (hu) tx.appendChild(el('div','u',hu));
         a.appendChild(tx); var ar = el('span','ar'); ar.innerHTML = ARROW; a.appendChild(ar);
@@ -412,9 +418,9 @@ footer{margin-top:56px;padding-top:28px;border-top:1px solid var(--line);display
   function pvOpen(l, color){
     pvCur = l;
     pvt.style.setProperty('--pc', color); pvt.style.setProperty('--pon', window.MPBA_ON(color)); pvt.style.setProperty('--pcd', deep(color));
-    $('pvi').innerHTML = IC(l.icon, 14);
+    $('pvi').innerHTML = IC(l.icon, 14); $('pvi').classList.toggle('w', !!icw(l.icon));
     $('pvh').textContent = host(l.url) || l.url.replace(/^(mailto|tel):/i, '');
-    $('pvbig').innerHTML = IC(l.icon, 28);
+    $('pvbig').innerHTML = IC(l.icon, 28); $('pvbig').classList.toggle('w', !!icw(l.icon));
     $('pvft').innerHTML = ''; var t = el('span', null, l.title); $('pvft').appendChild(t);
     $('pvft').appendChild(el('small', null, !isWeb(l.url) ? (/^mailto:/i.test(l.url) ? 'Enviar un correo' : 'Llamar') : (l.preview === 'none' ? (host(l.url) || '') : 'Vista previa no disponible')));
     paint(); place();
@@ -480,9 +486,9 @@ footer{margin-top:56px;padding-top:28px;border-top:1px solid var(--line);display
   function sheetOpen(l, color){
     shCur = l;
     [sheet, shv].forEach(function(x){ x.style.setProperty('--pc', color); x.style.setProperty('--pon', window.MPBA_ON(color)); x.style.setProperty('--pcd', deep(color)); });
-    $('shi').innerHTML = IC(l.icon, 14);
+    $('shi').innerHTML = IC(l.icon, 14); $('shi').classList.toggle('w', !!icw(l.icon));
     $('shh').textContent = host(l.url) || l.url.replace(/^(mailto|tel):/i, '');
-    $('shbig').innerHTML = IC(l.icon, 28);
+    $('shbig').innerHTML = IC(l.icon, 28); $('shbig').classList.toggle('w', !!icw(l.icon));
     $('shft').innerHTML = ''; $('shft').appendChild(el('span', null, l.title));
     $('shft').appendChild(el('small', null, !isWeb(l.url) ? (/^mailto:/i.test(l.url) ? 'Enviar un correo' : 'Llamar') : (l.preview === 'none' ? (host(l.url) || '') : 'Vista previa no disponible')));
     $('sht').textContent = l.title; $('shd').textContent = l.desc || '';
