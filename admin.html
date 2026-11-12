@@ -128,6 +128,11 @@ input[type=checkbox]{accent-color:var(--pri);width:16px;height:16px}
 .pop{position:absolute;z-index:20;background:#fff;border:1px solid var(--line);border-radius:14px;padding:10px;display:grid;grid-template-columns:repeat(5,40px);gap:6px;box-shadow:0 20px 40px -15px rgba(20,26,58,.35)}
 .pop button{width:40px;height:40px;border-radius:10px;border:1px solid var(--line);background:#fff;display:grid;place-items:center;cursor:pointer;color:var(--ink)}
 .pop button:hover,.pop button[aria-pressed=true]{background:var(--soft);border-color:var(--pri);color:var(--pri)}
+.pop .pl{grid-column:1/-1;font-size:11.5px;font-weight:600;color:var(--ink3);letter-spacing:.04em;text-transform:uppercase;margin-top:4px}
+.pop .pl:first-child{margin-top:0}
+.pop button.up{grid-column:1/-1;width:auto;height:36px;display:flex;justify-content:center;gap:6px;font-size:13px;font-weight:600;color:var(--pri)}
+.pop .ph{grid-column:1/-1;font-size:12px;color:var(--ink3);margin-top:-2px}
+.ipick.w{background:#fff!important;box-shadow:inset 0 0 0 1px var(--line)}
 .toast{position:fixed;bottom:22px;left:50%;transform:translate(-50%,20px);opacity:0;background:var(--ink);color:#fff;padding:11px 18px;border-radius:12px;font-weight:600;font-size:14px;transition:.25s;z-index:30;pointer-events:none;max-width:92vw;text-align:center}
 .toast.on{opacity:1;transform:translate(-50%,0)}.toast.bad{background:var(--bad)}
 .loading{min-height:100vh;display:grid;place-items:center;color:var(--ink3)}
@@ -214,7 +219,7 @@ input[type=checkbox]{accent-color:var(--pri);width:16px;height:16px}
 </div>
 <div class="toast" id="toast" role="status"></div>
 
-<script src="assets/core.js?v=20261110c"></script><!-- al cambiar core.js, subir este número para que nadie quede con la versión vieja -->
+<script src="assets/core.js?v=20261112a"></script><!-- al cambiar core.js, subir este número para que nadie quede con la versión vieja -->
 <script>
 (function(){
 var IC = window.MPBA_ICON, ICONS = window.MPBA_ICONS, SLOTS = window.MPBA_SLOTS, FONTS = window.MPBA_FONTS, PRESETS = window.MPBA_PRESETS;
@@ -247,6 +252,7 @@ function normalize(d){
   d.sections.forEach(function(s){ s.links = s.links || []; s.color = window.MPBA_SLOT(s.color); });
   return d;
 }
+var ICON_PATH = /^img:(uploads\/|assets\/icons\/)[a-z0-9_.-]+\.(png|jpe?g|webp)$/i;
 var PREV_PATH = /^(uploads\/|assets\/previews\/)[a-z0-9_.-]+\.(jpe?g|png|webp)$/i;
 var URL_OK = /^(https?:\/\/\S+\.\S+|mailto:\S+|tel:[+0-9 ()-]+)$/i;
 /* Limpieza antes de publicar (misma regla que aplica api.php en el servidor) */
@@ -258,7 +264,7 @@ function clean(d){
     s.title = s.title.trim().slice(0,60);
     s.links = s.links.filter(function(l){ return (l.title||'').trim() && URL_OK.test((l.url||'').trim()); }).map(function(l){
       l.title = l.title.trim().slice(0,100); l.url = l.url.trim(); l.desc = (l.desc||'').trim().slice(0,160);
-      if (!ICONS[l.icon]) l.icon = 'link';
+      if (!ICONS[l.icon] && !ICON_PATH.test(l.icon || '')) l.icon = 'link';
       l.visible = l.visible !== false; l.featured = !!l.featured && !feat; if (l.featured) feat = true;
       l.highlight = !!l.highlight && !l.featured;
       l.preview = l.preview === 'none' ? 'none' : (PREV_PATH.test(l.preview || '') ? l.preview : '');
@@ -453,6 +459,25 @@ window.addEventListener('beforeunload', function(e){ if (D && JSON.stringify(D) 
 
 /* Sube las imágenes de vista previa nuevas (quedan como archivos, no dentro de los datos) */
 async function uploadPreviews(data){
+  /* Íconos propios nuevos: se suben una sola vez aunque se usen en varios enlaces */
+  var done = {}, icons = [];
+  data.sections.forEach(function(s){ s.links.forEach(function(l){ if (/^img:data:image\//.test(l.icon || '')) icons.push(l); }); });
+  for (var n = 0; n < icons.length; n++) {
+    var li = icons[n], key = li.icon;
+    if (!done[key]) {
+      var b = key.split(',')[1];
+      if (MODE === 'server') {
+        var f2 = new FormData(); f2.append('logo', new Blob([b64ToBytes(b)], {type:'image/png'}), 'icon.png'); f2.append('kind', 'icon');
+        var r2 = await api('logo', f2); if (!r2.ok) throw new Error(r2.error || 'No se pudo subir la imagen');
+        done[key] = 'img:' + r2.path;
+      } else {
+        var ip = 'assets/icons/' + String(li.id || 'l').replace(/[^a-z0-9_-]/gi, '') + '-' + Date.now() + '.png';
+        await gh('PUT', repoPath(CFG) + '/contents/' + ip, {message: 'Agrega ícono de «' + (li.title || 'enlace') + '»', content: b, branch: CFG.branch});
+        done[key] = 'img:' + ip;
+      }
+    }
+    li.icon = done[key];
+  }
   var list = [];
   data.sections.forEach(function(s){ s.links.forEach(function(l){ if (/^data:image\//.test(l.preview || '')) list.push(l); }); });
   for (var i = 0; i < list.length; i++) {
@@ -552,9 +577,27 @@ var TR='<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="curr
 function iconPicker(btn, current, onPick){
   closePop();
   var p = h('div', {class:'pop', role:'dialog', 'aria-label':'Elegir ícono'});
-  Object.keys(ICONS).forEach(function(k){
-    p.appendChild(h('button', {type:'button', title:ICONS[k].label, 'aria-label':ICONS[k].label, 'aria-pressed':String(k===current), html:IC(k,20), on:{click:function(){onPick(k); closePop(); btn.focus();}}}));
-  });
+  function opt(k, label){
+    p.appendChild(h('button', {type:'button', title:label, 'aria-label':label, 'aria-pressed':String(k===current), html:IC(k,20), on:{click:function(){onPick(k); closePop(); btn.focus();}}}));
+  }
+  var LOGOS = ['cec', 'cec-color'];
+  p.appendChild(h('div', {class:'pl', text:'Íconos'}));
+  Object.keys(ICONS).forEach(function(k){ if (LOGOS.indexOf(k) < 0) opt(k, ICONS[k].label); });
+  p.appendChild(h('div', {class:'pl', text:'Logos'}));
+  LOGOS.forEach(function(k){ opt(k, ICONS[k].label); });
+  p.appendChild(h('div', {class:'ph', text:'El de color va sobre fondo blanco; el liso toma el color de la sección.'}));
+  /* Imágenes propias ya usadas en algún enlace, para reutilizarlas */
+  var mine = [];
+  D.sections.forEach(function(s){ s.links.forEach(function(l){ if (/^img:/.test(l.icon || '') && mine.indexOf(l.icon) < 0) mine.push(l.icon); }); });
+  p.appendChild(h('div', {class:'pl', text:'Imágenes propias'}));
+  mine.forEach(function(k){ opt(k, 'Imagen propia'); });
+  var file = h('input', {type:'file', accept:'image/png,image/jpeg,image/webp', on:{change:async function(){
+    var f = file.files[0]; if (!f) return;
+    try { onPick('img:' + await toIcon(f)); toast('Imagen cargada como ícono. Publicá para que se vea en la página.'); }
+    catch(x) { toast('No se pudo leer la imagen', true); }
+  }}});
+  p.appendChild(h('button', {type:'button', class:'up', html:'＋ Subir imagen', on:{click:function(){ file.click(); closePop(); }}}));
+  p.appendChild(h('div', {class:'ph', text:'PNG, JPG o WEBP, idealmente cuadrada y con fondo transparente. Se muestra sobre fondo blanco.'}));
   document.body.appendChild(p);
   var r = btn.getBoundingClientRect();
   p.style.top = (r.bottom + window.scrollY + 6) + 'px';
@@ -586,8 +629,8 @@ function vLinks(v){
     ])]);
     if (!s.links.length) box.appendChild(h('div', {class:'empty', text:'Esta sección todavía no tiene enlaces.'}));
     s.links.forEach(function(l, li){
-      var ib = h('button', {type:'button', class:'ipick', style:'background:'+(pal[s.color]||pal.blue)+';color:'+window.MPBA_ON(pal[s.color]||pal.blue), title:'Cambiar ícono', 'aria-label':'Cambiar ícono', html:IC(l.icon,22)});
-      ib.addEventListener('click', function(e){ e.stopPropagation(); iconPicker(ib, l.icon, function(k){ l.icon=k; ib.innerHTML=IC(k,22); changed(); }); });
+      var ib = h('button', {type:'button', class:'ipick' + (window.MPBA_ICON_IMG(l.icon) ? ' w' : ''), style:'background:'+(pal[s.color]||pal.blue)+';color:'+window.MPBA_ON(pal[s.color]||pal.blue), title:'Cambiar ícono', 'aria-label':'Cambiar ícono', html:IC(l.icon,22)});
+      ib.addEventListener('click', function(e){ e.stopPropagation(); iconPicker(ib, l.icon, function(k){ l.icon=k; render(); changed(); }); });
       var row;
       var visCb = h('input', {type:'checkbox', checked:l.visible!==false, on:{change:function(e){ l.visible=e.target.checked; row.classList.toggle('off', !l.visible); changed(); }}});
       var featCb = h('input', {type:'checkbox', checked:!!l.featured, on:{change:function(e){
@@ -757,6 +800,19 @@ function vProfile(v){
   ]));
 }
 /* Recorta la imagen a 16:10 (desde arriba) y la achica a 640×400 */
+/* Ajusta la imagen del ícono a 160×160 (completa, sin recortar, con fondo transparente) */
+function toIcon(file){
+  return new Promise(function(ok, ko){
+    var img = new Image(), url = URL.createObjectURL(file);
+    img.onload = function(){
+      var N = 160, c = document.createElement('canvas'); c.width = N; c.height = N;
+      var sc = Math.min(N / img.width, N / img.height), w = img.width * sc, hh = img.height * sc;
+      c.getContext('2d').drawImage(img, (N - w) / 2, (N - hh) / 2, w, hh); URL.revokeObjectURL(url);
+      ok(c.toDataURL('image/png'));
+    };
+    img.onerror = ko; img.src = url;
+  });
+}
 function toPreview(file){
   return new Promise(function(ok, ko){
     var img = new Image(), url = URL.createObjectURL(file);
