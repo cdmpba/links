@@ -10,7 +10,7 @@ window.MPBA_DATA = {
     "mode": "light",
     "bg": "#eaf6fd",
     "accent": "#013D70",
-    "font": "sistema",
+    "font": "google",
     "layout": "list",
     "cards": "solid",
     "radius": 16,
