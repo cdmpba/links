@@ -22,8 +22,10 @@ const MAX_TRIES  = 5;
 const LOCK_SECS  = 900;
 const IDLE_SECS  = 7200;
 const ICONS  = ['globe','map','pin','heart','school','youtube','doc','scale','book','news','phone','mail','alert','users','calendar','instagram','facebook','x','linkedin','link'];
-const SLOTS  = ['blue','green','red','sky','gold','violet'];
-const FONTS  = ['moderna','clasica','geometrica','sistema'];
+/* Paleta institucional (restyling del isologo): los únicos colores permitidos */
+const BRAND    = ['blue' => '#013D70', 'green' => '#5FAC5E', 'sky' => '#78C2FF', 'red' => '#EC184F'];
+const SLOT_MAP = ['gold' => 'sky', 'violet' => 'blue'];   /* colores de versiones anteriores */
+const FONTS  = ['moderna','clasica','geometrica','google','sistema'];
 
 $https = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') || (($_SERVER['HTTP_X_FORWARDED_PROTO'] ?? '') === 'https');
 session_name('mpba_admin');
@@ -71,15 +73,18 @@ function clean(array $in): array {
          || (strlen($logo) < 400000 && preg_match('~^data:image/(png|jpeg|webp);base64,[A-Za-z0-9+/=]+$~', $logo));
   $t = $in['theme'] ?? [];
   $pal = [];
-  $defPal = ['blue' => '#3b82f6', 'green' => '#2fb36b', 'red' => '#ef4b4b', 'sky' => '#36b9e8', 'gold' => '#e8b33a', 'violet' => '#8b7cf6'];
-  foreach ($defPal as $k => $v) $pal[$k] = hex($t['palette'][$k] ?? null, $v);
+  $pal = BRAND;
+  foreach (SLOT_MAP as $k => $v) $pal[$k] = BRAND[$v];
+  $dark = ($t['mode'] ?? '') !== 'light';
+  $acc = strtoupper((string)($t['accent'] ?? ''));
+  if (!in_array($acc, BRAND, true) || ($dark && $acc === BRAND['blue'])) $acc = $dark ? BRAND['sky'] : BRAND['blue'];
   $o = [
     'profile' => ['title' => str($p['title'] ?? '', 80), 'subtitle' => str($p['subtitle'] ?? '', 200), 'kicker' => str($p['kicker'] ?? '', 60),
                   'handle' => str($p['handle'] ?? '', 40), 'logo' => $okLogo ? $logo : ''],
     'theme' => [
       'mode'   => ($t['mode'] ?? '') === 'light' ? 'light' : 'dark',
       'bg'     => hex($t['bg'] ?? null, '#0b1238'),
-      'accent' => hex($t['accent'] ?? null, '#3b82f6'),
+      'accent' => $acc,
       'font'   => in_array($t['font'] ?? '', FONTS, true) ? $t['font'] : 'moderna',
       'layout' => ($t['layout'] ?? '') === 'list' ? 'list' : 'grid',
       'cards'  => in_array($t['cards'] ?? '', ['glass','solid','outline'], true) ? $t['cards'] : 'glass',
@@ -94,7 +99,7 @@ function clean(array $in): array {
   foreach (array_slice($in['sections'] ?? [], 0, 20) as $s) {
     if (!is_array($s)) continue;
     $sec = ['id' => slug($s['id'] ?? '', 's'), 'title' => str($s['title'] ?? '', 60),
-            'color' => in_array($s['color'] ?? '', SLOTS, true) ? $s['color'] : 'blue', 'links' => []];
+            'color' => isset(BRAND[SLOT_MAP[$s['color'] ?? ''] ?? ($s['color'] ?? '')]) ? (SLOT_MAP[$s['color']] ?? $s['color']) : 'blue', 'links' => []];
     foreach (array_slice($s['links'] ?? [], 0, 40) as $l) {
       if (!is_array($l)) continue;
       $u = url_ok($l['url'] ?? ''); $ti = str($l['title'] ?? '', 100);
