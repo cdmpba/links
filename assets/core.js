@@ -19,11 +19,25 @@ window.MPBA_ICONS = {
   facebook: { label: "Facebook",      d: '<path d="M14 21v-7.5h2.6l.4-3H14V8.6c0-.9.3-1.6 1.6-1.6H17V4.3c-.3 0-1.2-.1-2.2-.1-2.2 0-3.8 1.4-3.8 3.9v2.4H8.5v3H11V21"/>' },
   x:        { label: "X (Twitter)",   d: '<path d="M4 4l16 16M20 4 4 20" />' },
   linkedin: { label: "LinkedIn",      d: '<rect x="3" y="3" width="18" height="18" rx="3"/><path d="M8 10.5V17M8 7.5v.3M12 17v-6.5M12 13.5c0-1.7 1-3 2.5-3s2.5 1 2.5 3V17"/>' },
+  cec:      { label: "CEC (toma el color de la sección)", d: '<path fill="currentColor" stroke="none" d="M21.53 3.75A11 11 0 1 1 2.47 3.75L6.35 5.99A6.52 6.52 0 1 0 17.65 5.99Z"/><circle cx="12" cy="9.25" r="4.42" fill="currentColor" stroke="none"/>' },
+  "cec-color": { label: "CEC (logo a color)", img: "assets/cec-color.png" },
   link:     { label: "Enlace",        d: '<path d="M10 14a4.5 4.5 0 0 0 6.4 0l3-3a4.5 4.5 0 0 0-6.4-6.4l-1 1"/><path d="M14 10a4.5 4.5 0 0 0-6.4 0l-3 3a4.5 4.5 0 0 0 6.4 6.4l1-1"/>' }
 };
+/* Imagen usada como ícono: logo a color del sistema o imagen propia subida desde el panel ("img:ruta") */
+window.MPBA_ICON_SRC = function (name) {
+  var i = window.MPBA_ICONS[name];
+  if (i && i.img) return i.img;
+  var src = /^img:/.test(name || "") ? name.slice(4) : "";
+  if (/^(assets\/icons\/|uploads\/)[\w.-]+\.(png|jpe?g|webp)$/i.test(src)) return src;
+  if (/^data:image\/(png|jpeg|webp);base64,[A-Za-z0-9+\/=]+$/.test(src)) return src;
+  return "";
+};
+/* Los íconos que son imagen van sobre fondo blanco, no sobre el color de la sección */
+window.MPBA_ICON_IMG = function (name) { return !!window.MPBA_ICON_SRC(name); };
 window.MPBA_ICON = function (name, size) {
+  var s = size || 24, src = window.MPBA_ICON_SRC(name);
+  if (src) { var z = Math.round(s * 1.35); return '<img class="icimg" src="' + src + '" width="' + z + '" height="' + z + '" alt="" style="display:block;object-fit:contain">'; }
   var i = window.MPBA_ICONS[name] || window.MPBA_ICONS.link;
-  var s = size || 24;
   return '<svg viewBox="0 0 24 24" width="' + s + '" height="' + s + '" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' + i.d + '</svg>';
 };
 /* Paleta institucional (restyling del isologo). Son los únicos colores de la página y del panel. */
