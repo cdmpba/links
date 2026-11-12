@@ -162,7 +162,7 @@ window.MPBA_DATA = {
           "featured": false,
           "highlight": false,
           "preview": "",
-          "color": ""
+          "color": "#C4302B"
         }
       ],
       "level": "secondary",
@@ -195,7 +195,7 @@ window.MPBA_DATA = {
           "featured": false,
           "highlight": false,
           "preview": "",
-          "color": ""
+          "color": "#C4302B"
         }
       ],
       "level": "secondary",
