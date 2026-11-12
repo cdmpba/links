@@ -102,7 +102,7 @@ window.MPBA_DATA = {
           "title": "¿Qué hacer frente a un caso de violencia de género?",
           "desc": "Dónde pedir ayuda y cómo denunciar",
           "url": "https://www.mpba.gov.ar/denunciasviolencia",
-          "icon": "heart",
+          "icon": "alert",
           "color": "#741FE9",
           "visible": true,
           "featured": false,
