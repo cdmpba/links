@@ -76,7 +76,7 @@ window.MPBA_DATA = {
         {
           "id": "ldefensa",
           "title": "¿Necesitás quién te defienda?",
-          "desc": "Cómo acceder a la Defensa Pública",
+          "desc": "Enteráte cómo acceder a la Defensa Pública",
           "url": "https://www.mpba.gov.ar/defensa",
           "icon": "scale",
           "color": "#EC184F",
@@ -88,7 +88,7 @@ window.MPBA_DATA = {
         {
           "id": "ltutelar",
           "title": "¿Cómo funcionan las curadurías y asesorías tutelares?",
-          "desc": "Qué hacen y cómo contactarlas",
+          "desc": "Informáte sobre qué hacen y cómo contactarlas",
           "url": "https://www.mpba.gov.ar/asesoria",
           "icon": "users",
           "color": "#78C2FF",
