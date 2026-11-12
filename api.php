@@ -55,6 +55,12 @@ function clear_fail(): void { $a = jread(TRIES_FILE, []); unset($a[ip()]); jwrit
 function str($v, int $max): string { $v = is_string($v) ? trim(preg_replace('/\s+/u', ' ', $v)) : ''; return mb_substr($v, 0, $max); }
 function url_ok($u): string { $u = str($u, 600); return preg_match('~^(https?://[^\s<>"]+\.[^\s<>"]+|mailto:[^\s<>"]+|tel:[+0-9 ()-]+)$~i', $u) ? $u : ''; }
 function slug($v, string $p): string { $v = is_string($v) ? preg_replace('/[^a-z0-9_-]/i', '', $v) : ''; return $v !== '' ? substr($v, 0, 24) : $p . bin2hex(random_bytes(4)); }
+/* Color de sección: código #RRGGBB, o nombre de versiones anteriores (blue, green...) */
+function color_ok($v): string {
+  if (is_string($v) && preg_match('/^#[0-9a-f]{6}$/i', $v)) return strtoupper($v);
+  $k = SLOT_MAP[$v] ?? $v;
+  return BRAND[$k] ?? BRAND['blue'];
+}
 /* Ícono: uno del sistema o una imagen propia subida desde el panel ("img:ruta") */
 function icon_ok($v): string {
   if (in_array($v, ICONS, true)) return $v;
@@ -85,7 +91,8 @@ function clean(array $in): array {
   if (!in_array($acc, BRAND, true) || ($dark && $acc === BRAND['blue'])) $acc = $dark ? BRAND['sky'] : BRAND['blue'];
   $o = [
     'profile' => ['title' => str($p['title'] ?? '', 80), 'subtitle' => str($p['subtitle'] ?? '', 200), 'kicker' => str($p['kicker'] ?? '', 60),
-                  'handle' => str($p['handle'] ?? '', 40), 'logo' => $okLogo ? $logo : ''],
+                  'handle' => str($p['handle'] ?? '', 40), 'logo' => $okLogo ? $logo : '',
+                  'footer' => str($p['footer'] ?? '', 120), 'footer2' => str($p['footer2'] ?? 'Procuración General de la Suprema Corte de Justicia', 160)],
     'theme' => [
       'mode'   => ($t['mode'] ?? '') === 'light' ? 'light' : 'dark',
       'bg'     => hex($t['bg'] ?? null, '#0b1238'),
@@ -97,6 +104,7 @@ function clean(array $in): array {
       'glow'   => !empty($t['glow']), 'grid' => !empty($t['grid']), 'motion' => !empty($t['motion']),
       'preview' => !array_key_exists('preview', $t) || !empty($t['preview']),
       'palette'=> $pal,
+      'colors' => array_slice(array_values(array_unique(array_map('strtoupper', array_filter((array)($t['colors'] ?? []), fn($c) => is_string($c) && preg_match('/^#[0-9a-f]{6}$/i', $c))))), 0, 16),
     ],
     'sections' => [], 'social' => [],
   ];
@@ -104,7 +112,8 @@ function clean(array $in): array {
   foreach (array_slice($in['sections'] ?? [], 0, 20) as $s) {
     if (!is_array($s)) continue;
     $sec = ['id' => slug($s['id'] ?? '', 's'), 'title' => str($s['title'] ?? '', 60),
-            'color' => isset(BRAND[SLOT_MAP[$s['color'] ?? ''] ?? ($s['color'] ?? '')]) ? (SLOT_MAP[$s['color']] ?? $s['color']) : 'blue', 'links' => []];
+            'color' => color_ok($s['color'] ?? ''), 'level' => ($s['level'] ?? '') === 'secondary' ? 'secondary' : 'primary',
+            'showTitle' => !array_key_exists('showTitle', $s) || !empty($s['showTitle']), 'links' => []];
     foreach (array_slice($s['links'] ?? [], 0, 40) as $l) {
       if (!is_array($l)) continue;
       $u = url_ok($l['url'] ?? ''); $ti = str($l['title'] ?? '', 100);
@@ -113,6 +122,7 @@ function clean(array $in): array {
       $sec['links'][] = ['id' => slug($l['id'] ?? '', 'l'), 'title' => $ti, 'desc' => str($l['desc'] ?? '', 160), 'url' => $u,
         'icon' => icon_ok($l['icon'] ?? ''), 'visible' => !empty($l['visible']), 'featured' => $f,
         'highlight' => !empty($l['highlight']) && !$f,
+        'color' => (is_string($l['color'] ?? null) && preg_match('/^#[0-9a-f]{6}$/i', $l['color'])) ? strtoupper($l['color']) : '',
         'preview' => prev_ok($l['preview'] ?? '')];
     }
     if ($sec['title'] !== '') $o['sections'][] = $sec;
