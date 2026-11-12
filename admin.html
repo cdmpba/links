@@ -641,7 +641,7 @@ function colorPicker(btn, current, onPick, inherit){
   (p.querySelector('[aria-pressed=true]') || p.querySelector('button')).focus();
 }
 function cbtn(hex, label, onClick, inheritColor){
-  return h('button', {type:'button', class:'cbtn', title:'Cambiar color', on:{click:function(e){ e.stopPropagation(); onClick(this); }}},
+  return h('button', {type:'button', class:'cbtn', title:label, on:{click:function(e){ e.stopPropagation(); onClick(this); }}},
     [h('i', {class: hex ? null : 'inh', style: hex ? 'background:' + hex : null}), label]);
 }
 
@@ -685,7 +685,7 @@ document.addEventListener('keydown', function(e){ if (e.key === 'Escape') closeP
 function vLinks(v){
   var pal = D.theme.palette;
   D.sections.forEach(function(s, si){
-    var sw = cbtn(s.color, colorName(s.color), function(b){ colorPicker(b, s.color, function(hex){ s.color = hex || s.color; render(); changed(); }); });
+    var sw = cbtn(s.color, 'Color de la sección: ' + colorName(s.color), function(b){ colorPicker(b, s.color, function(hex){ s.color = hex || s.color; render(); changed(); }); });
     var box = h('div', {class:'panel'}, [h('div', {class:'sh'}, [
       h('input', {type:'text', value:s.title, 'aria-label':'Nombre de la sección', placeholder:'Nombre de la sección', on:{input:function(e){s.title=e.target.value; changed();}}}),
       sw,
@@ -737,7 +737,7 @@ function vLinks(v){
             h('div', {class:'w'}, [h('label', {class:'f', text:'Descripción breve (opcional)'}), inp(l,'desc','Una línea que explique a dónde lleva','text','Descripción')])
           ]),
           h('div', {class:'tg'}, [
-            cbtn(l.color, l.color ? colorName(l.color) : 'Color de la sección', function(b){ colorPicker(b, l.color, function(hex){ l.color = hex; render(); changed(); }, s.color); }),
+            cbtn(l.color, l.color ? 'Color de este enlace: ' + colorName(l.color) : 'Color de este enlace: igual que la sección', function(b){ colorPicker(b, l.color, function(hex){ l.color = hex; render(); changed(); }, s.color); }),
             h('label', {}, [visCb, 'Visible']),
             h('label', {title:'Se resalta y ocupa todo el ancho, en su lugar dentro de esta sección. Puede haber varios.', class: l.featured ? 'dis' : null}, [hlCb, 'Destacar en la sección']),
             h('label', {title:'Se muestra grande arriba de todo, antes de las secciones. Solo puede haber uno.'}, [featCb, 'Destacado principal'])
