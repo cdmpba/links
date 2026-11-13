@@ -76,7 +76,7 @@ window.MPBA_DATA = {
         {
           "id": "ldefensa",
           "title": "¿Necesitás quién te defienda?",
-          "desc": "Enteráte cómo acceder a la Defensa Pública",
+          "desc": "Podés acceder a la Defensa Pública",
           "url": "https://www.mpba.gov.ar/defensa",
           "icon": "scale",
           "color": "#EC184F",
