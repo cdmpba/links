@@ -178,7 +178,7 @@ window.MPBA_DATA = {
           "title": "Anatomía de una investigación",
           "desc": "Serie audiovisual en la que fiscales del MPBA reconstruyen la investigación de casos emblemáticos",
           "url": "https://www.youtube.com/playlist?list=PLBtWGwJ4GJLU",
-          "icon": "book",
+          "icon": "doc",
           "visible": true,
           "featured": false,
           "highlight": true,
@@ -196,6 +196,18 @@ window.MPBA_DATA = {
           "highlight": false,
           "preview": "",
           "color": "#C4302B"
+        },
+        {
+          "id": "lcjuywtv",
+          "title": "Justicia Clara",
+          "desc": "Guía rápida para saber qué hacer ante problemas cotidianos con la justicia",
+          "url": "https://www.mpba.gov.ar/justicia_clara",
+          "icon": "scale",
+          "color": "",
+          "visible": true,
+          "featured": false,
+          "highlight": false,
+          "preview": ""
         }
       ],
       "level": "secondary",
