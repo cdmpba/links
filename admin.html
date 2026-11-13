@@ -158,6 +158,22 @@ input[type=checkbox]{accent-color:var(--pri);width:16px;height:16px}
 @media(max-width:1100px){.layout,.wide .layout{grid-template-columns:1fr}.preview{position:static}.phone iframe{height:680px}.presets{grid-template-columns:repeat(2,1fr)}}
 @media(max-width:640px){.fields,.grid2,.colors{grid-template-columns:1fr}.link{grid-template-columns:auto minmax(0,1fr)}.side{grid-column:1/-1;flex-direction:row;justify-content:flex-end}.bar .state{display:none}}
 </style>
+<script>
+/* Si hay una versión publicada más nueva que la que guardó el navegador, recarga una sola vez sin caché.
+   Al publicar una actualización: cambiar BUILD acá, en el otro HTML y en version.json (los tres iguales). */
+(function(){
+  var BUILD = '20261113c';
+  try {
+    fetch('version.json?t=' + Date.now(), {cache:'no-store'}).then(function(r){ return r.ok ? r.json() : null; }).then(function(v){
+      if (!v || !v.build || v.build === BUILD) return;
+      var k = 'mpba-rl-' + v.build;
+      if (sessionStorage.getItem(k)) return;
+      sessionStorage.setItem(k, '1');
+      var u = new URL(location.href); u.searchParams.set('v', v.build); location.replace(u.toString());
+    }).catch(function(){});
+  } catch(e) {}
+})();
+</script>
 </head>
 <body>
 <div class="loading" id="loading">Cargando…</div>
@@ -237,7 +253,7 @@ input[type=checkbox]{accent-color:var(--pri);width:16px;height:16px}
 </div>
 <div class="toast" id="toast" role="status"></div>
 
-<script src="assets/core.js?v=20261113b"></script><!-- al cambiar core.js, subir este número para que nadie quede con la versión vieja -->
+<script src="assets/core.js?v=20261113c"></script><!-- al cambiar core.js, subir este número para que nadie quede con la versión vieja -->
 <script>
 (function(){
 var IC = window.MPBA_ICON, ICONS = window.MPBA_ICONS, SLOTS = window.MPBA_SLOTS, FONTS = window.MPBA_FONTS, PRESETS = window.MPBA_PRESETS;
