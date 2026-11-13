@@ -204,16 +204,16 @@ window.MPBA_DATA = {
   ],
   "social": [
     {
-      "type": "youtube",
-      "url": "https://www.youtube.com/channel/UCnRlF42jwiUEX2MOHYdXltg"
-    },
-    {
       "type": "instagram",
       "url": "https://www.instagram.com/mpbaoficial"
     },
     {
       "type": "linkedin",
       "url": "https://www.linkedin.com/in/mpba-oficial-982b693b8/"
+    },
+    {
+      "type": "youtube",
+      "url": "https://www.youtube.com/channel/UCnRlF42jwiUEX2MOHYdXltg"
     },
     {
       "type": "globe",
