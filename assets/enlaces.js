@@ -29,7 +29,8 @@ window.MPBA_DATA = {
       "violet": "#013D70"
     },
     "colors": [
-      "#C4302B"
+      "#C4302B",
+      "#FBFE89"
     ]
   },
   "sections": [
@@ -203,7 +204,7 @@ window.MPBA_DATA = {
           "desc": "Guía rápida para saber qué hacer ante problemas cotidianos con la justicia",
           "url": "https://www.mpba.gov.ar/justicia_clara",
           "icon": "scale",
-          "color": "",
+          "color": "#FBFE89",
           "visible": true,
           "featured": false,
           "highlight": false,
