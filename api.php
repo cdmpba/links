@@ -21,7 +21,7 @@ const UPLOAD_DIR = ROOT . '/uploads';
 const MAX_TRIES  = 5;
 const LOCK_SECS  = 900;
 const IDLE_SECS  = 7200;
-const ICONS  = ['globe','map','pin','heart','school','youtube','doc','scale','book','news','phone','mail','alert','users','calendar','instagram','facebook','x','linkedin','link','cec','cec-color'];
+const ICONS  = ['globe','map','pin','heart','school','youtube','doc','scale','book','news','phone','mail','alert','users','calendar','instagram','facebook','x','linkedin','link','cec','cec-color','gavel','lupa','genero','viofam'];
 /* Paleta institucional (restyling del isologo): los únicos colores permitidos */
 const BRAND    = ['blue' => '#013D70', 'green' => '#5FAC5E', 'sky' => '#78C2FF', 'red' => '#EC184F'];
 const SLOT_MAP = ['gold' => 'sky', 'violet' => 'blue'];   /* colores de versiones anteriores */
