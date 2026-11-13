@@ -55,6 +55,8 @@ function clear_fail(): void { $a = jread(TRIES_FILE, []); unset($a[ip()]); jwrit
 function str($v, int $max): string { $v = is_string($v) ? trim(preg_replace('/\s+/u', ' ', $v)) : ''; return mb_substr($v, 0, $max); }
 function url_ok($u): string { $u = str($u, 600); return preg_match('~^(https?://[^\s<>"]+\.[^\s<>"]+|mailto:[^\s<>"]+|tel:[+0-9 ()-]+)$~i', $u) ? $u : ''; }
 function slug($v, string $p): string { $v = is_string($v) ? preg_replace('/[^a-z0-9_-]/i', '', $v) : ''; return $v !== '' ? substr($v, 0, 24) : $p . bin2hex(random_bytes(4)); }
+/* Código de color #RRGGBB, o vacío (usa el color heredado o el automático) */
+function hex_or_empty($v): string { return (is_string($v) && preg_match('/^#[0-9a-f]{6}$/i', $v)) ? strtoupper($v) : ''; }
 /* Color de sección: código #RRGGBB, o nombre de versiones anteriores (blue, green...) */
 function color_ok($v): string {
   if (is_string($v) && preg_match('/^#[0-9a-f]{6}$/i', $v)) return strtoupper($v);
@@ -113,7 +115,8 @@ function clean(array $in): array {
     if (!is_array($s)) continue;
     $sec = ['id' => slug($s['id'] ?? '', 's'), 'title' => str($s['title'] ?? '', 60),
             'color' => color_ok($s['color'] ?? ''), 'level' => ($s['level'] ?? '') === 'secondary' ? 'secondary' : 'primary',
-            'showTitle' => !array_key_exists('showTitle', $s) || !empty($s['showTitle']), 'links' => []];
+            'showTitle' => !array_key_exists('showTitle', $s) || !empty($s['showTitle']),
+            'iconColor' => hex_or_empty($s['iconColor'] ?? ''), 'links' => []];
     foreach (array_slice($s['links'] ?? [], 0, 40) as $l) {
       if (!is_array($l)) continue;
       $u = url_ok($l['url'] ?? ''); $ti = str($l['title'] ?? '', 100);
@@ -122,7 +125,7 @@ function clean(array $in): array {
       $sec['links'][] = ['id' => slug($l['id'] ?? '', 'l'), 'title' => $ti, 'desc' => str($l['desc'] ?? '', 160), 'url' => $u,
         'icon' => icon_ok($l['icon'] ?? ''), 'visible' => !empty($l['visible']), 'featured' => $f,
         'highlight' => !empty($l['highlight']) && !$f,
-        'color' => (is_string($l['color'] ?? null) && preg_match('/^#[0-9a-f]{6}$/i', $l['color'])) ? strtoupper($l['color']) : '',
+        'color' => hex_or_empty($l['color'] ?? ''), 'iconColor' => hex_or_empty($l['iconColor'] ?? ''),
         'preview' => prev_ok($l['preview'] ?? '')];
     }
     if ($sec['title'] !== '') $o['sections'][] = $sec;
