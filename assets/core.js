@@ -8,6 +8,8 @@ window.MPBA_ICONS = {
   youtube:  { label: "YouTube",       d: '<rect x="2.5" y="5.5" width="19" height="13" rx="4"/><path d="m10.2 9.2 4.8 2.8-4.8 2.8V9.2z" fill="currentColor" stroke="none"/>' },
   doc:      { label: "Documento",     d: '<path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8l-5-5z"/><path d="M14 3v5h5M8.5 13h7M8.5 16.5h5"/>' },
   scale:    { label: "Justicia",      d: '<path d="M12 4v16M7 20h10M5 7h14M12 4l-1 3h2l-1-3z"/><path d="m5 7-2.5 6a2.8 2.8 0 0 0 5 0L5 7zM19 7l-2.5 6a2.8 2.8 0 0 0 5 0L19 7z"/>' },
+  gavel:    { label: "Martillo de juez", d: '<g transform="rotate(-45 9.6 8.6)"><rect x="4" y="5.9" width="11.2" height="5.4" rx="1.3"/><path d="M6.9 5.9v5.4M12.3 5.9v5.4"/></g><path d="M11.5 10.5l7.2 7.2"/><path d="M3.2 21.3h10.4M4.6 21.3v-1.9a1.2 1.2 0 0 1 1.2-1.2h5.2a1.2 1.2 0 0 1 1.2 1.2v1.9"/>' },
+  lupa:     { label: "Lupa", d: '<circle cx="14" cy="10" r="6.3"/><path d="M9.6 14.4 3.6 20.4"/><path d="M11 7.6a3.6 3.6 0 0 1 2.6-1.6"/>' },
   book:     { label: "Biblioteca",    d: '<path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H20v15H6.5A2.5 2.5 0 0 0 4 20.5v-15z"/><path d="M4 20.5A2.5 2.5 0 0 0 6.5 23H20v-5"/>' },
   news:     { label: "Novedades",     d: '<rect x="3" y="4" width="15" height="16" rx="2"/><path d="M18 8h2a1 1 0 0 1 1 1v9a2 2 0 0 1-2 2H5M7 8h7M7 12h7M7 16h4"/>' },
   phone:    { label: "Teléfono",      d: '<path d="M5 3.5h3.5l1.8 4.6-2.3 1.4a11 11 0 0 0 6.5 6.5l1.4-2.3 4.6 1.8V19a2 2 0 0 1-2 2A17 17 0 0 1 3 5.5a2 2 0 0 1 2-2z"/>' },
