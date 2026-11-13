@@ -72,7 +72,7 @@ h1 span{background:linear-gradient(100deg,var(--ink) 25%,color-mix(in srgb,var(-
   box-shadow:0 30px 60px -25px color-mix(in srgb,var(--accent) 80%,transparent);transition:transform .25s,box-shadow .25s}
 .feat::after{content:"";position:absolute;right:-60px;top:-80px;width:280px;height:280px;border-radius:50%;background:radial-gradient(circle,rgba(255,255,255,.28),transparent 65%);pointer-events:none}
 .feat:hover{transform:translateY(-3px)}
-.feat .ic{width:58px;height:58px;border-radius:18px;background:color-mix(in srgb,var(--onacc) 17%,transparent);display:grid;place-items:center;flex:none}
+.feat .ic{width:58px;height:58px;border-radius:18px;background:color-mix(in srgb,var(--onacc) 17%,transparent);display:grid;place-items:center;flex:none;color:var(--ion,inherit)}
 .feat .t{font:600 20px/1.25 var(--fh)}
 .feat .d{color:color-mix(in srgb,var(--onacc) 85%,transparent);font-size:15px;margin-top:3px}
 .feat .lbl{font:600 11.5px/1 var(--fh);letter-spacing:.14em;text-transform:uppercase;color:color-mix(in srgb,var(--onacc) 78%,transparent);margin-bottom:8px}
@@ -94,7 +94,7 @@ h1 span{background:linear-gradient(100deg,var(--ink) 25%,color-mix(in srgb,var(-
 .card::before{content:"";position:absolute;inset:0;background:radial-gradient(400px circle at var(--mx,50%) var(--my,0%),color-mix(in srgb,var(--c) 20%,transparent),transparent 45%);opacity:0;transition:opacity .3s;pointer-events:none}
 .card:hover{background:var(--card-h);border-color:color-mix(in srgb,var(--c) 55%,transparent);transform:translateY(-3px);box-shadow:0 22px 40px -22px color-mix(in srgb,var(--c) 70%,transparent)}
 .card:hover::before{opacity:1}
-.card .ic{position:relative;width:48px;height:48px;border-radius:calc(var(--r)*.68);display:grid;place-items:center;flex:none;color:var(--on);
+.card .ic{position:relative;width:48px;height:48px;border-radius:calc(var(--r)*.68);display:grid;place-items:center;flex:none;color:var(--ion,var(--on));
   background:var(--c)}   /* color plano, sin degradé ni sombra, para que se vea el color exacto */
 .card .tx{position:relative;min-width:0;flex:1}
 .card .t{font:600 16.5px/1.3 var(--fh)}
@@ -128,7 +128,7 @@ h1 span{background:linear-gradient(100deg,var(--ink) 25%,color-mix(in srgb,var(-
   opacity:0;transform:scale(.92) translateY(6px);transform-origin:var(--ox,0) var(--oy,0);transition:opacity .18s ease,transform .22s cubic-bezier(.2,.8,.2,1)}
 .pvw.on .pvt{opacity:1;transform:none}
 .pvt .pb{display:flex;align-items:center;gap:9px;padding:10px 12px;border-bottom:1px solid var(--line);font:500 12.5px/1.2 var(--fb);color:var(--ink2)}
-.pvt .pb i{width:22px;height:22px;border-radius:7px;display:grid;place-items:center;color:var(--pon);background:var(--pc);flex:none}
+.pvt .pb i{width:22px;height:22px;border-radius:7px;display:grid;place-items:center;color:var(--pion,var(--pon));background:var(--pc);flex:none}
 .pvt .pb span{flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .pvt .pb b{font-weight:600;color:var(--pc);font-size:11.5px;letter-spacing:.02em;flex:none}
 .pvt .ps{position:relative;margin:8px;border-radius:12px;overflow:hidden;aspect-ratio:16/10;background:color-mix(in srgb,var(--pc) 10%,var(--tile))}
@@ -139,7 +139,7 @@ h1 span{background:linear-gradient(100deg,var(--ink) 25%,color-mix(in srgb,var(-
 @keyframes sk{from{background-position:120% 0}to{background-position:-120% 0}}
 .pvt .pf{position:absolute;inset:0;display:none;place-items:center;align-content:center;gap:10px;text-align:center;color:var(--pc);font:600 13px/1.3 var(--fh);padding:16px;
   background:radial-gradient(circle at 30% 20%,color-mix(in srgb,var(--pc) 22%,transparent),transparent 60%)}
-.pvt .pf .big{width:58px;height:58px;border-radius:18px;display:grid;place-items:center;color:var(--pon);background:var(--pc)}
+.pvt .pf .big{width:58px;height:58px;border-radius:18px;display:grid;place-items:center;color:var(--pion,var(--pon));background:var(--pc)}
 .pvt .pf small{display:block;color:var(--ink3);font:500 12px/1.3 var(--fb)}
 .pvt.err .pf{display:grid}
 .pvt .wt{position:absolute;left:10px;bottom:10px;font:500 11.5px/1 var(--fb);color:var(--ink2);background:var(--tile);padding:6px 9px;border-radius:99px;display:none}
@@ -232,7 +232,7 @@ footer{margin-top:64px;padding-top:30px;border-top:1px solid var(--line);display
 /* Si hay una versión publicada más nueva que la que guardó el navegador, recarga una sola vez sin caché.
    Al publicar una actualización: cambiar BUILD acá, en el otro HTML y en version.json (los tres iguales). */
 (function(){
-  var BUILD = '20261113c';
+  var BUILD = '20261113d';
   try {
     fetch('version.json?t=' + Date.now(), {cache:'no-store'}).then(function(r){ return r.ok ? r.json() : null; }).then(function(v){
       if (!v || !v.build || v.build === BUILD) return;
@@ -287,7 +287,7 @@ footer{margin-top:64px;padding-top:30px;border-top:1px solid var(--line);display
   <div class="ps"><div class="sk"></div><img id="pvimg" alt="" referrerpolicy="no-referrer"><div class="pf"><span class="big" id="pvbig"></span><span id="pvft"></span></div><span class="wt">Generando vista previa…</span></div>
 </div></div>
 
-<script src="assets/core.js?v=20261113c"></script><!-- al cambiar core.js, subir este número para que nadie quede con la versión vieja -->
+<script src="assets/core.js?v=20261113d"></script><!-- al cambiar core.js, subir este número para que nadie quede con la versión vieja -->
 <script src="assets/enlaces.js"></script>
 <script>
 (function(){
@@ -298,6 +298,8 @@ footer{margin-top:64px;padding-top:30px;border-top:1px solid var(--line);display
   function el(t,c,txt){var e=document.createElement(t);if(c)e.className=c;if(txt!=null)e.textContent=txt;return e}
   /* Íconos que son imagen (logo a color o imagen propia): van sobre fondo blanco */
   function icw(name){ return window.MPBA_ICON_IMG(name) ? ' w' : ''; }
+  /* Color del ícono: el del enlace; si no, el de la sección; si no, automático según el fondo */
+  function iconColor(l, s, bg){ return window.MPBA_HEX.test(l.iconColor || '') ? l.iconColor : (window.MPBA_HEX.test(s.iconColor || '') ? s.iconColor : window.MPBA_ON(bg)); }
   function host(u){try{return new URL(u).hostname.replace(/^www\./,'')}catch(e){return ''}}
   function safe(u){return /^(https?:|mailto:|tel:)/i.test(u||'')?u:'#'}
   function safeImg(u){return /^(https:\/\/|uploads\/|assets\/|data:image\/(png|jpeg|webp);base64,)/i.test(u||'')?u:''}
@@ -371,7 +373,8 @@ footer{margin-top:64px;padding-top:30px;border-top:1px solid var(--line);display
           a.innerHTML = '<span class="ic' + icw(l.icon) + '">' + IC(l.icon,28) + '</span>';
           var tx = el('div'); tx.appendChild(el('div','lbl','Destacado')); tx.appendChild(el('div','t',l.title)); if (l.desc) tx.appendChild(el('div','d',l.desc));
           a.appendChild(tx); var go = el('span','go'); go.innerHTML = ARROW; a.appendChild(go);
-          hover(a, l, fc, true);   /* en el celular muestra la captura, como los destacados */
+          var fic = iconColor(l, s, fc); if (l.iconColor || s.iconColor) a.style.setProperty('--ion', fic);
+          hover(a, l, fc, true, fic);   /* en el celular muestra la captura, como los destacados */
           main.insertBefore(a, main.firstChild); /* el principal siempre encabeza la página */
         } else rest.push(l);
       });
@@ -390,12 +393,13 @@ footer{margin-top:64px;padding-top:30px;border-top:1px solid var(--line);display
         /* Cada enlace puede tener su propio color; si no, usa el de la sección */
         var lc = l.color ? window.MPBA_COLOR(l.color, c) : c;
         if (lc !== c) { a.style.setProperty('--c', lc); a.style.setProperty('--on', window.MPBA_ON(lc)); a.style.setProperty('--cd', deep(lc)); }
+        var ic = iconColor(l, s, lc); a.style.setProperty('--ion', ic);
         a.innerHTML = '<span class="ic' + icw(l.icon) + '">' + IC(l.icon, sec2 ? (l.highlight ? 22 : 19) : (l.highlight ? 27 : 24)) + '</span>';
         var tx = el('div','tx'); if (l.highlight) tx.appendChild(el('span','pill','Destacado')); tx.appendChild(el('div','t',l.title)); if (l.desc) tx.appendChild(el('div','d',l.desc));
         var hu = host(l.url); if (hu) tx.appendChild(el('div','u',hu));
         a.appendChild(tx); var ar = el('span','ar'); ar.innerHTML = ARROW; a.appendChild(ar);
         a.addEventListener('pointermove', function(e){var r=a.getBoundingClientRect();a.style.setProperty('--mx',(e.clientX-r.left)+'px');a.style.setProperty('--my',(e.clientY-r.top)+'px')});
-        hover(a, l, lc, !!l.highlight);
+        hover(a, l, lc, !!l.highlight, ic);
         g.appendChild(a);
       });
       sec.appendChild(g); main.appendChild(sec);
@@ -463,23 +467,23 @@ footer{margin-top:64px;padding-top:30px;border-top:1px solid var(--line);display
     if (ownImg(l.preview)) return custom(l.preview);
     return isWeb(l.url) ? shot(l.url) : {state:'err'};
   }
-  function hover(a, l, color, hl){
+  function hover(a, l, color, hl, icol){
     if (THUMBS && hl) thumb(a, l);
-    if (!CAN_HOVER) { if (!hl) press(a, l, color); return; }
+    if (!CAN_HOVER) { if (!hl) press(a, l, color, icol); return; }
     links.push(l);
     a.addEventListener('mouseenter', function(e){
       if (!PV_ON) return;
       mx = e.clientX; my = e.clientY;
       clearTimeout(pvTimer);
-      pvTimer = setTimeout(function(){ pvOpen(l, color); }, 180);
+      pvTimer = setTimeout(function(){ pvOpen(l, color, icol); }, 180);
     });
     a.addEventListener('mousemove', function(e){ mx = e.clientX; my = e.clientY; if (pvCur) place(); });
     a.addEventListener('mouseleave', close);
     a.addEventListener('click', close);
   }
-  function pvOpen(l, color){
+  function pvOpen(l, color, icol){
     pvCur = l;
-    pvt.style.setProperty('--pc', color); pvt.style.setProperty('--pon', window.MPBA_ON(color)); pvt.style.setProperty('--pcd', deep(color));
+    pvt.style.setProperty('--pc', color); pvt.style.setProperty('--pon', window.MPBA_ON(color)); pvt.style.setProperty('--pcd', deep(color)); pvt.style.setProperty('--pion', icol || window.MPBA_ON(color));
     $('pvi').innerHTML = IC(l.icon, 14); $('pvi').classList.toggle('w', !!icw(l.icon));
     $('pvh').textContent = host(l.url) || l.url.replace(/^(mailto|tel):/i, '');
     $('pvbig').innerHTML = IC(l.icon, 28); $('pvbig').classList.toggle('w', !!icw(l.icon));
@@ -526,7 +530,7 @@ footer{margin-top:64px;padding-top:30px;border-top:1px solid var(--line);display
   /* Enlaces comunes en el celular: mantener apretado abre la vista previa */
   var held = false, shCur = null;
   var sheet = $('sheet'), shv = $('shv'), shimg = $('shimg');
-  function press(a, l, color){
+  function press(a, l, color, icol){
     var t = 0, p = 0, sx = 0, sy = 0;
     function stop(){ clearTimeout(t); clearTimeout(p); a.classList.remove('pressing'); }
     a.addEventListener('touchstart', function(e){
@@ -536,7 +540,7 @@ footer{margin-top:64px;padding-top:30px;border-top:1px solid var(--line);display
       t = setTimeout(function(){
         held = true; a.classList.remove('pressing');
         try { if (navigator.vibrate) navigator.vibrate(10); } catch(x) {}
-        sheetOpen(l, color);
+        sheetOpen(l, color, icol);
       }, 450);
     }, {passive:true});
     a.addEventListener('touchmove', function(e){ var q = e.touches[0]; if (Math.abs(q.clientX - sx) > 10 || Math.abs(q.clientY - sy) > 10) stop(); }, {passive:true});
@@ -545,9 +549,9 @@ footer{margin-top:64px;padding-top:30px;border-top:1px solid var(--line);display
     a.addEventListener('click', function(e){ if (held) { e.preventDefault(); held = false; } });
     a.addEventListener('contextmenu', function(e){ e.preventDefault(); });
   }
-  function sheetOpen(l, color){
+  function sheetOpen(l, color, icol){
     shCur = l;
-    [sheet, shv].forEach(function(x){ x.style.setProperty('--pc', color); x.style.setProperty('--pon', window.MPBA_ON(color)); x.style.setProperty('--pcd', deep(color)); });
+    [sheet, shv].forEach(function(x){ x.style.setProperty('--pc', color); x.style.setProperty('--pon', window.MPBA_ON(color)); x.style.setProperty('--pcd', deep(color)); x.style.setProperty('--pion', icol || window.MPBA_ON(color)); });
     $('shi').innerHTML = IC(l.icon, 14); $('shi').classList.toggle('w', !!icw(l.icon));
     $('shh').textContent = host(l.url) || l.url.replace(/^(mailto|tel):/i, '');
     $('shbig').innerHTML = IC(l.icon, 28); $('shbig').classList.toggle('w', !!icw(l.icon));
