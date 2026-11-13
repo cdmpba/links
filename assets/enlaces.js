@@ -200,6 +200,19 @@ window.MPBA_DATA = {
           "iconColor": ""
         },
         {
+          "id": "lcjuywtv",
+          "title": "Justicia Clara",
+          "desc": "Guía rápida para saber qué hacer ante problemas cotidianos con la justicia",
+          "url": "https://www.mpba.gov.ar/justicia_clara",
+          "icon": "gavel",
+          "color": "#FBFE89",
+          "visible": true,
+          "featured": false,
+          "highlight": true,
+          "preview": "",
+          "iconColor": ""
+        },
+        {
           "id": "lk9l0jg3",
           "title": "Canal de Youtube",
           "desc": "Canal oficial del Área de Comunicación Digital y Redes Sociales",
@@ -210,19 +223,6 @@ window.MPBA_DATA = {
           "highlight": false,
           "preview": "",
           "color": "#C4302B",
-          "iconColor": ""
-        },
-        {
-          "id": "lcjuywtv",
-          "title": "Justicia Clara",
-          "desc": "Guía rápida para saber qué hacer ante problemas cotidianos con la justicia",
-          "url": "https://www.mpba.gov.ar/justicia_clara",
-          "icon": "gavel",
-          "color": "#FBFE89",
-          "visible": true,
-          "featured": false,
-          "highlight": false,
-          "preview": "",
           "iconColor": ""
         }
       ],
