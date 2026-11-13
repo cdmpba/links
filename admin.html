@@ -162,7 +162,7 @@ input[type=checkbox]{accent-color:var(--pri);width:16px;height:16px}
 /* Si hay una versión publicada más nueva que la que guardó el navegador, recarga una sola vez sin caché.
    Al publicar una actualización: cambiar BUILD acá, en el otro HTML y en version.json (los tres iguales). */
 (function(){
-  var BUILD = '20261113c';
+  var BUILD = '20261113d';
   try {
     fetch('version.json?t=' + Date.now(), {cache:'no-store'}).then(function(r){ return r.ok ? r.json() : null; }).then(function(v){
       if (!v || !v.build || v.build === BUILD) return;
@@ -253,7 +253,7 @@ input[type=checkbox]{accent-color:var(--pri);width:16px;height:16px}
 </div>
 <div class="toast" id="toast" role="status"></div>
 
-<script src="assets/core.js?v=20261113c"></script><!-- al cambiar core.js, subir este número para que nadie quede con la versión vieja -->
+<script src="assets/core.js?v=20261113d"></script><!-- al cambiar core.js, subir este número para que nadie quede con la versión vieja -->
 <script>
 (function(){
 var IC = window.MPBA_ICON, ICONS = window.MPBA_ICONS, SLOTS = window.MPBA_SLOTS, FONTS = window.MPBA_FONTS, PRESETS = window.MPBA_PRESETS;
@@ -286,7 +286,8 @@ function normalize(d){
   d.sections.forEach(function(s){
     s.links = s.links || []; s.color = window.MPBA_COLOR(s.color);
     s.level = s.level === 'secondary' ? 'secondary' : 'primary'; s.showTitle = s.showTitle !== false;
-    s.links.forEach(function(l){ l.color = window.MPBA_HEX.test(l.color || '') ? l.color.toUpperCase() : ''; });
+    s.iconColor = window.MPBA_HEX.test(s.iconColor || '') ? s.iconColor.toUpperCase() : '';
+    s.links.forEach(function(l){ l.color = window.MPBA_HEX.test(l.color || '') ? l.color.toUpperCase() : ''; l.iconColor = window.MPBA_HEX.test(l.iconColor || '') ? l.iconColor.toUpperCase() : ''; });
   });
   return d;
 }
@@ -299,6 +300,7 @@ function clean(d){
   o.theme = window.MPBA_THEME(o.theme);
   o.sections = o.sections.filter(function(s){ return (s.title||'').trim(); }).map(function(s){
     s.color = window.MPBA_COLOR(s.color); s.level = s.level === 'secondary' ? 'secondary' : 'primary'; s.showTitle = s.showTitle !== false;
+    s.iconColor = window.MPBA_HEX.test(s.iconColor || '') ? s.iconColor.toUpperCase() : '';
     s.title = s.title.trim().slice(0,60);
     s.links = s.links.filter(function(l){ return (l.title||'').trim() && URL_OK.test((l.url||'').trim()); }).map(function(l){
       l.title = l.title.trim().slice(0,100); l.url = l.url.trim(); l.desc = (l.desc||'').trim().slice(0,160);
@@ -306,6 +308,7 @@ function clean(d){
       l.visible = l.visible !== false; l.featured = !!l.featured && !feat; if (l.featured) feat = true;
       l.highlight = !!l.highlight && !l.featured;
       l.color = window.MPBA_HEX.test(l.color || '') ? l.color.toUpperCase() : '';
+      l.iconColor = window.MPBA_HEX.test(l.iconColor || '') ? l.iconColor.toUpperCase() : '';
       l.preview = l.preview === 'none' ? 'none' : (PREV_PATH.test(l.preview || '') ? l.preview : '');
       return l;
     });
@@ -615,10 +618,14 @@ var TR='<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="curr
 /* selector de íconos */
 /* Selector de color: paleta oficial, complementarios, colores propios y código #RRGGBB */
 function colorName(hex){
+  if (hex === '#FFFFFF') return 'Blanco';
   var p = window.MPBA_PALETTE.filter(function(c){ return c.hex === hex; })[0];
   return p ? p.label : hex;
 }
-function colorPicker(btn, current, onPick, inherit){
+/* opt.label: texto de la opción "sin color propio"; opt.white: ofrece blanco (para íconos) */
+function colorPicker(btn, current, onPick, inherit, opt){
+  opt = opt || {};
+  var inhLabel = opt.label || 'Igual que la sección';
   closePop();
   var p = h('div', {class:'pop cpop', role:'dialog', 'aria-label':'Elegir color'});
   function sw(hex, label){
@@ -627,8 +634,9 @@ function colorPicker(btn, current, onPick, inherit){
   }
   if (inherit) {
     p.appendChild(h('button', {type:'button', class:'inh', style:'--sc:' + inherit, 'aria-pressed':String(!current), on:{click:function(){ onPick(''); closePop(); btn.focus(); }}},
-      [h('i'), 'Igual que la sección']));
+      [h('i'), inhLabel]));
   }
+  if (opt.white) { p.appendChild(h('div', {class:'pl', text:'Básicos'})); sw('#FFFFFF', 'Blanco'); }
   ['Oficiales', 'Complementarios'].forEach(function(g){
     p.appendChild(h('div', {class:'pl', text:g}));
     window.MPBA_PALETTE.forEach(function(c){ if (c.group === g) sw(c.hex, c.label); });
@@ -646,7 +654,7 @@ function colorPicker(btn, current, onPick, inherit){
     onPick(v); closePop(); btn.focus();
   }
   p.appendChild(h('div', {class:'add'}, [prev, inp, h('button', {type:'button', text:'Agregar', on:{click:add}})]));
-  p.appendChild(h('div', {class:'cur', text: current ? 'Actual: ' + colorName(current) + (colorName(current) === current ? '' : ' · ' + current) : 'Actual: igual que la sección'}));
+  p.appendChild(h('div', {class:'cur', text: current ? 'Actual: ' + colorName(current) + (colorName(current) === current ? '' : ' · ' + current) : 'Actual: ' + inhLabel.toLowerCase()}));
   document.body.appendChild(p);
   var r = btn.getBoundingClientRect();
   p.style.top = (r.bottom + window.scrollY + 6) + 'px';
@@ -711,13 +719,16 @@ function vLinks(v){
         if (confirm('¿Eliminar la sección "'+(s.title||'sin nombre')+'" y sus '+s.links.length+' enlaces?')) { D.sections.splice(si,1); render(); changed(); }
       }}})
     ]), h('div', {class:'secopt'}, [
+      cbtn(s.iconColor, 'Color de los íconos: ' + (s.iconColor ? colorName(s.iconColor) : 'automático'), function(b){
+        colorPicker(b, s.iconColor, function(hex){ s.iconColor = hex; render(); changed(); }, window.MPBA_ON(s.color),
+          {label:'Automático (blanco o azul oscuro según el fondo)', white:true}); }),
       h('label', {title:'Si se desmarca, los enlaces se muestran sin el título de la sección arriba.'}, [h('input', {type:'checkbox', checked:s.showTitle !== false, on:{change:function(e){ s.showTitle = e.target.checked; changed(); }}}), 'Mostrar el título en la página']),
       h('label', {title:'Se muestra más abajo, más compacta y bajo «Más recursos».'}, [h('input', {type:'checkbox', checked:s.level === 'secondary', on:{change:function(e){ s.level = e.target.checked ? 'secondary' : 'primary'; changed(); }}}), 'Sección secundaria (menor jerarquía)'])
     ])]);
     if (!s.links.length) box.appendChild(h('div', {class:'empty', text:'Esta sección todavía no tiene enlaces.'}));
     s.links.forEach(function(l, li){
-      var lc = l.color || s.color;
-      var ib = h('button', {type:'button', class:'ipick' + (window.MPBA_ICON_IMG(l.icon) ? ' w' : ''), style:'background:'+lc+';color:'+window.MPBA_ON(lc), title:'Cambiar ícono', 'aria-label':'Cambiar ícono', html:IC(l.icon,22)});
+      var lc = l.color || s.color, licol = l.iconColor || s.iconColor || window.MPBA_ON(lc);
+      var ib = h('button', {type:'button', class:'ipick' + (window.MPBA_ICON_IMG(l.icon) ? ' w' : ''), style:'background:'+lc+';color:'+licol, title:'Cambiar ícono', 'aria-label':'Cambiar ícono', html:IC(l.icon,22)});
       ib.addEventListener('click', function(e){ e.stopPropagation(); iconPicker(ib, l.icon, function(k){ l.icon=k; render(); changed(); }); });
       var row;
       var visCb = h('input', {type:'checkbox', checked:l.visible!==false, on:{change:function(e){ l.visible=e.target.checked; row.classList.toggle('off', !l.visible); changed(); }}});
@@ -754,6 +765,7 @@ function vLinks(v){
           ]),
           h('div', {class:'tg'}, [
             cbtn(l.color, l.color ? 'Color de este enlace: ' + colorName(l.color) : 'Color de este enlace: igual que la sección', function(b){ colorPicker(b, l.color, function(hex){ l.color = hex; render(); changed(); }, s.color); }),
+            cbtn(l.iconColor, 'Color del ícono: ' + (l.iconColor ? colorName(l.iconColor) : (s.iconColor ? 'igual que la sección' : 'automático')), function(b){ colorPicker(b, l.iconColor, function(hex){ l.iconColor = hex; render(); changed(); }, s.iconColor || window.MPBA_ON(lc), {label: s.iconColor ? 'Igual que la sección' : 'Automático (blanco o azul oscuro según el fondo)', white:true}); }),
             h('label', {}, [visCb, 'Visible']),
             h('label', {title:'Se resalta y ocupa todo el ancho, en su lugar dentro de esta sección. Puede haber varios.', class: l.featured ? 'dis' : null}, [hlCb, 'Destacar en la sección']),
             h('label', {title:'Se muestra grande arriba de todo, antes de las secciones. Solo puede haber uno.'}, [featCb, 'Destacado principal'])
