@@ -30,7 +30,9 @@ window.MPBA_DATA = {
     },
     "colors": [
       "#C4302B",
-      "#FBFE89"
+      "#FBFE89",
+      "#D6CBC4",
+      "#976A4D"
     ]
   },
   "sections": [
@@ -196,8 +198,8 @@ window.MPBA_DATA = {
           "featured": false,
           "highlight": true,
           "preview": "",
-          "color": "",
-          "iconColor": ""
+          "color": "#976A4D",
+          "iconColor": "#FFFFFF"
         },
         {
           "id": "lcjuywtv",
