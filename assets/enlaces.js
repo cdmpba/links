@@ -49,11 +49,13 @@ window.MPBA_DATA = {
           "featured": true,
           "highlight": false,
           "preview": "assets/previews/l1-1794312052759.jpg",
-          "color": "#013D70"
+          "color": "#013D70",
+          "iconColor": ""
         }
       ],
       "level": "primary",
-      "showTitle": true
+      "showTitle": true,
+      "iconColor": ""
     },
     {
       "id": "s2",
@@ -72,7 +74,8 @@ window.MPBA_DATA = {
           "visible": true,
           "featured": false,
           "highlight": false,
-          "preview": "assets/previews/ldenuncia-1794497266058.jpg"
+          "preview": "assets/previews/ldenuncia-1794497266058.jpg",
+          "iconColor": ""
         },
         {
           "id": "ldefensa",
@@ -84,7 +87,8 @@ window.MPBA_DATA = {
           "visible": true,
           "featured": false,
           "highlight": false,
-          "preview": "assets/previews/ldefensa-1794497267754.jpg"
+          "preview": "assets/previews/ldefensa-1794497267754.jpg",
+          "iconColor": ""
         },
         {
           "id": "ltutelar",
@@ -96,7 +100,8 @@ window.MPBA_DATA = {
           "visible": true,
           "featured": false,
           "highlight": false,
-          "preview": "assets/previews/ltutelar-1794497269770.jpg"
+          "preview": "assets/previews/ltutelar-1794497269770.jpg",
+          "iconColor": "#FFFFFF"
         },
         {
           "id": "lgenero",
@@ -108,7 +113,8 @@ window.MPBA_DATA = {
           "visible": true,
           "featured": false,
           "highlight": false,
-          "preview": "assets/previews/lgenero-1794497271500.jpg"
+          "preview": "assets/previews/lgenero-1794497271500.jpg",
+          "iconColor": ""
         },
         {
           "id": "l2",
@@ -120,7 +126,8 @@ window.MPBA_DATA = {
           "featured": false,
           "highlight": false,
           "preview": "assets/previews/l2-1794311829507.jpg",
-          "color": "#013D70"
+          "color": "#013D70",
+          "iconColor": ""
         },
         {
           "id": "l3",
@@ -132,9 +139,11 @@ window.MPBA_DATA = {
           "featured": false,
           "highlight": false,
           "preview": "assets/previews/l3-1794312348158.jpg",
-          "color": ""
+          "color": "",
+          "iconColor": ""
         }
-      ]
+      ],
+      "iconColor": ""
     },
     {
       "id": "s3",
@@ -151,7 +160,8 @@ window.MPBA_DATA = {
           "featured": false,
           "highlight": false,
           "preview": "assets/previews/l4-1794311938188.jpg",
-          "color": ""
+          "color": "",
+          "iconColor": ""
         },
         {
           "id": "l5",
@@ -163,11 +173,13 @@ window.MPBA_DATA = {
           "featured": false,
           "highlight": false,
           "preview": "",
-          "color": "#C4302B"
+          "color": "#C4302B",
+          "iconColor": ""
         }
       ],
       "level": "secondary",
-      "showTitle": true
+      "showTitle": true,
+      "iconColor": ""
     },
     {
       "id": "sasj5tza",
@@ -179,12 +191,13 @@ window.MPBA_DATA = {
           "title": "Anatomía de una investigación",
           "desc": "Serie audiovisual en la que fiscales del MPBA reconstruyen la investigación de casos emblemáticos",
           "url": "https://www.youtube.com/playlist?list=PLBtWGwJ4GJLU",
-          "icon": "doc",
+          "icon": "lupa",
           "visible": true,
           "featured": false,
           "highlight": true,
           "preview": "",
-          "color": ""
+          "color": "",
+          "iconColor": ""
         },
         {
           "id": "lk9l0jg3",
@@ -196,23 +209,26 @@ window.MPBA_DATA = {
           "featured": false,
           "highlight": false,
           "preview": "",
-          "color": "#C4302B"
+          "color": "#C4302B",
+          "iconColor": ""
         },
         {
           "id": "lcjuywtv",
           "title": "Justicia Clara",
           "desc": "Guía rápida para saber qué hacer ante problemas cotidianos con la justicia",
           "url": "https://www.mpba.gov.ar/justicia_clara",
-          "icon": "scale",
+          "icon": "gavel",
           "color": "#FBFE89",
           "visible": true,
           "featured": false,
           "highlight": false,
-          "preview": ""
+          "preview": "",
+          "iconColor": ""
         }
       ],
       "level": "secondary",
-      "showTitle": true
+      "showTitle": true,
+      "iconColor": ""
     }
   ],
   "social": [
