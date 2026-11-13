@@ -214,6 +214,10 @@ window.MPBA_DATA = {
     {
       "type": "linkedin",
       "url": "https://www.linkedin.com/in/mpba-oficial-982b693b8/"
+    },
+    {
+      "type": "globe",
+      "url": "https://www.mpba.gov.ar/"
     }
   ]
 };
