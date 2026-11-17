@@ -211,7 +211,7 @@ window.MPBA_DATA = {
           "visible": true,
           "featured": false,
           "highlight": true,
-          "preview": "",
+          "preview": "assets/previews/lcjuywtv-1794915475718.jpg",
           "iconColor": ""
         },
         {
