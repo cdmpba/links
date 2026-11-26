@@ -252,7 +252,7 @@ window.MPBA_DATA = {
         },
         {
           "id": "lk9l0jg3",
-          "title": "Canal de Youtube",
+          "title": "Canal de Comunicación Digital",
           "desc": "Canal oficial del Área de Comunicación Digital y Redes Sociales",
           "url": "https://www.youtube.com/@ComunicacionDigitalMPBA",
           "icon": "youtube",
