@@ -60,6 +60,42 @@ window.MPBA_DATA = {
       "iconColor": ""
     },
     {
+      "id": "svbjqher",
+      "title": "Búsquedas Laborales",
+      "color": "#BBCE6B",
+      "level": "primary",
+      "showTitle": true,
+      "links": [
+        {
+          "id": "lcwl5l5i",
+          "title": "Concurso público abierto para cubrir cargos de la Policía Judicial",
+          "desc": "109 cargos: medicina, informática, abogacía y más",
+          "url": "https://cec.mpba.gov.ar/convocatoria/concurso-policia-judicial-segundo-llamado/",
+          "icon": "news",
+          "color": "",
+          "visible": true,
+          "featured": false,
+          "highlight": false,
+          "preview": "assets/previews/lcwl5l5i-1795698639380.jpg",
+          "iconColor": ""
+        },
+        {
+          "id": "lope8qx3",
+          "title": "Búsqueda de personal administrativo para la Policía Judicial",
+          "desc": "Requisitos: Ser mayor de 18 años, tener secundario completo y domicilio en la provincia de Buenos Aires.",
+          "url": "https://ingreso.mpba.gov.ar/?rama=policia",
+          "icon": "news",
+          "color": "",
+          "visible": true,
+          "featured": false,
+          "highlight": false,
+          "iconColor": "",
+          "preview": ""
+        }
+      ],
+      "iconColor": ""
+    },
+    {
       "id": "s2",
       "title": "Orientación",
       "color": "#013D70",
