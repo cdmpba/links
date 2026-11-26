@@ -55,7 +55,7 @@ window.MPBA_DATA = {
           "iconColor": ""
         }
       ],
-      "level": "primary",
+      "level": "secondary",
       "showTitle": true,
       "iconColor": ""
     },
