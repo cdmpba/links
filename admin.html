@@ -162,7 +162,7 @@ input[type=checkbox]{accent-color:var(--pri);width:16px;height:16px}
 /* Si hay una versión publicada más nueva que la que guardó el navegador, recarga una sola vez sin caché.
    Al publicar una actualización: cambiar BUILD acá, en el otro HTML y en version.json (los tres iguales). */
 (function(){
-  var BUILD = '20261113d';
+  var BUILD = '20261126a';
   try {
     fetch('version.json?t=' + Date.now(), {cache:'no-store'}).then(function(r){ return r.ok ? r.json() : null; }).then(function(v){
       if (!v || !v.build || v.build === BUILD) return;
@@ -253,7 +253,7 @@ input[type=checkbox]{accent-color:var(--pri);width:16px;height:16px}
 </div>
 <div class="toast" id="toast" role="status"></div>
 
-<script src="assets/core.js?v=20261113d"></script><!-- al cambiar core.js, subir este número para que nadie quede con la versión vieja -->
+<script src="assets/core.js?v=20261126a"></script><!-- al cambiar core.js, subir este número para que nadie quede con la versión vieja -->
 <script>
 (function(){
 var IC = window.MPBA_ICON, ICONS = window.MPBA_ICONS, SLOTS = window.MPBA_SLOTS, FONTS = window.MPBA_FONTS, PRESETS = window.MPBA_PRESETS;
