@@ -62,8 +62,8 @@ window.MPBA_DATA = {
     {
       "id": "svbjqher",
       "title": "Búsquedas Laborales",
-      "color": "#BBCE6B",
-      "level": "secondary",
+      "color": "#61D08D",
+      "level": "primary",
       "showTitle": true,
       "links": [
         {
@@ -85,7 +85,7 @@ window.MPBA_DATA = {
           "desc": "Requisitos: Ser mayor de 18 años, tener secundario completo y domicilio en la provincia de Buenos Aires.",
           "url": "https://ingreso.mpba.gov.ar/?rama=policia",
           "icon": "briefcase",
-          "color": "",
+          "color": "#61D08D",
           "visible": true,
           "featured": false,
           "highlight": true,
